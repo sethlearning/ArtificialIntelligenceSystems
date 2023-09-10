@@ -127,7 +127,17 @@
         (assert (webdevelopment yes))
     else
         (assert (webdevelopment no))
-    
+    )
+)
+
+(defrule r7 "Indentation"
+    (declare (salience 0))
+    (not (goal ?))
+    =>
+    (if (ask-question-binary "Вы предпочитаете обозначение блоков кода при помощи отступов? ") then
+        (assert (indentation yes))
+    else
+        (assert (indentation no))
     )
 )
 
@@ -141,6 +151,7 @@
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (indentation no)
     =>
     (assert (goal "C"))
 )
@@ -153,6 +164,7 @@
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (indentation no)
     =>
     (assert (goal "C++"))
 )
@@ -165,6 +177,7 @@
     (microsoft yes)
     (interactive no)
     (webdevelopment no)
+    (indentation no)
     =>
     (assert (goal "C#"))
 )
@@ -177,6 +190,7 @@
     (microsoft yes)
     (interactive yes)
     (webdevelopment no)
+    (indentation no)
     =>
     (assert (goal "PowerShell"))
 )
@@ -189,6 +203,7 @@
     (microsoft yes)
     (interactive no)
     (webdevelopment no)
+    (indentation no)
     =>
     (assert (goal "Visual Basic Script"))
 )
@@ -201,6 +216,7 @@
     (microsoft no)
     (interactive yes)
     (webdevelopment no)
+    (indentation no)
     =>
     (assert (goal "BASH"))
 )
@@ -213,6 +229,7 @@
     (microsoft no)
     (interactive no)
     (webdevelopment yes)
+    (indentation no)
     =>
     (assert (goal "JavaScript"))
 )
@@ -224,6 +241,7 @@
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (indentation no)
     =>
     (assert (goal "Machine code"))
 )
@@ -236,6 +254,7 @@
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (indentation no)
     =>
     (assert (goal "Assembler"))
 )
@@ -248,6 +267,7 @@
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (indentation no)
     =>
     (assert (goal "Pascal"))
 )
@@ -260,6 +280,7 @@
     (microsoft no)
     (interactive yes)
     (webdevelopment yes)
+    (indentation yes)
     =>
     (assert (goal "Python"))
 )
@@ -272,6 +293,7 @@
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (indentation no)
     =>
     (assert (goal "Lisp"))
 )
