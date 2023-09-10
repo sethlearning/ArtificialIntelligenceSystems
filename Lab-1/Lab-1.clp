@@ -86,12 +86,24 @@
         (assert (level low)))
 )
 
+(defrule r3 "Is language object oriented"
+    (declare (salience 0))
+    (not (goal ?))
+    =>
+    (if (ask-question-binary "Вы предпочитаете объектно-ориентированные языки? ") then
+        (assert (object-oriented yes))
+    else
+        (assert (object-oriented no))
+    )
+)
+
 ; Knowledge base: consequents
 ;---------------------------------------------------------
 (defrule g1 "C"
     (not (goal ?))
     (paradigm compiled)
     (level low)
+    (object-oriented no)
     =>
     (assert (goal "C"))
 )
@@ -100,6 +112,7 @@
     (not (goal ?))
     (paradigm compiled)
     (level low)
+    (object-oriented yes)
     =>
     (assert (goal "C++"))
 )
@@ -108,6 +121,7 @@
     (not (goal ?))
     (paradigm compiled)
     (level high)
+    (object-oriented yes)
     =>
     (assert (goal "C#"))
 )
@@ -116,6 +130,7 @@
     (not (goal ?))
     (paradigm interpreted)
     (level high)
+    (object-oriented yes)
     =>
     (assert (goal "PowerShell"))
 )
@@ -124,6 +139,7 @@
     (not (goal ?))
     (paradigm interpreted)
     (level high)
+    (object-oriented no)
     =>
     (assert (goal "Visual Basic Script"))
 )
@@ -132,6 +148,7 @@
     (not (goal ?))
     (paradigm interpreted)
     (level high)
+    (object-oriented no)
     =>
     (assert (goal "BASH"))
 )
@@ -140,6 +157,7 @@
     (not (goal ?))
     (paradigm interpreted)
     (level high)
+    (object-oriented yes)
     =>
     (assert (goal "JavaScript"))
 )
@@ -147,6 +165,7 @@
 (defrule g8 "Machine Code"
     (not (goal ?))
     (level low)
+    (object-oriented no)
     =>
     (assert (goal "Machine code"))
 )
@@ -155,6 +174,7 @@
     (not (goal ?))
     (paradigm compiled)
     (level low)
+    (object-oriented no)
     =>
     (assert (goal "Assembler"))
 )
@@ -163,6 +183,7 @@
     (not (goal ?))
     (paradigm compiled)
     (level high)
+    (object-oriented no)
     =>
     (assert (goal "Pascal"))
 )
@@ -171,6 +192,7 @@
     (not (goal ?))
     (paradigm interpreted)
     (level high)
+    (object-oriented yes)
     =>
     (assert (goal "Python"))
 )
@@ -179,6 +201,7 @@
     (not (goal ?))
     (paradigm compiled)
     (level high)
+    (object-oriented no)
     =>
     (assert (goal "Lisp"))
 )
