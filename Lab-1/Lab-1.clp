@@ -62,12 +62,78 @@
     (assert (goal "Подходящий именно вам язык программирования не может быть подобран. Учите все."))
 )
 
-; Knowledge base - antecedents
+; Knowledge base: antecedents
 ;---------------------------------------------------------
-(defrule r1 ""
+(defrule r1 "Compiled or interpreted"
     (declare (salience 0))
     (not (goal ?))
     =>
     (bind ?response (ask-question-list "Вы предпочитаете КОМПИЛИРУЕМЫЕ (1) или ИНТЕРПРЕТИРУЕМЫЕ (2) языки? (Введите 1 или 2): " 1 2 ))
+    (if (eq ?response 1) then
+        (assert (paradigm compiled)))
+    (if (eq ?response 2) then
+        (assert (paradigm interpreted)))
+)
 
+
+; Knowledge base: consequents
+;---------------------------------------------------------
+(defrule g1 "C"
+    (not (goal ?))
+    =>
+)
+
+(defrule g2 "C++"
+    (not (goal ?))
+    =>
+)
+
+(defrule g3 "C#"
+    (not (goal ?))
+    =>
+)
+
+(defrule g4 "PowerShell"
+    (not (goal ?))
+    =>
+)
+
+(defrule g5 "Visual Basic Script"
+    (not (goal ?))
+    =>
+)
+
+(defrule g6 "BASH"
+    (not (goal ?))
+    =>
+)
+
+(defrule g7 "JavaScript"
+    (not (goal ?))
+    =>
+)
+
+(defrule g8 "Machine Code"
+    (not (goal ?))
+    =>
+)
+
+(defrule g9 "Assembler"
+    (not (goal ?))
+    =>
+)
+
+(defrule g10 "Pascal"
+    (not (goal ?))
+    =>
+)
+
+(defrule g11 "Python"
+    (not (goal ?))
+    =>
+)
+
+(defrule g12 "Lisp"
+    (not (goal ?))
+    =>
 )
