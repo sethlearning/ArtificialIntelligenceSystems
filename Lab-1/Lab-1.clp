@@ -97,6 +97,17 @@
     )
 )
 
+(defrule r4 "Is language created by Microsoft"
+    (declare (salience 0))
+    (not (goal ?))
+    =>
+    (if (ask-question-binary "Вы предпочитаете языки разработки Microsoft? ") then
+        (assert (microsoft yes))
+    else
+        (assert (microsoft no))
+    )
+)
+
 ; Knowledge base: consequents
 ;---------------------------------------------------------
 (defrule g1 "C"
@@ -104,6 +115,7 @@
     (paradigm compiled)
     (level low)
     (object-oriented no)
+    (microsoft no)
     =>
     (assert (goal "C"))
 )
@@ -113,6 +125,7 @@
     (paradigm compiled)
     (level low)
     (object-oriented yes)
+    (microsoft no)
     =>
     (assert (goal "C++"))
 )
@@ -122,6 +135,7 @@
     (paradigm compiled)
     (level high)
     (object-oriented yes)
+    (microsoft yes)
     =>
     (assert (goal "C#"))
 )
@@ -131,6 +145,7 @@
     (paradigm interpreted)
     (level high)
     (object-oriented yes)
+    (microsoft yes)
     =>
     (assert (goal "PowerShell"))
 )
@@ -140,6 +155,7 @@
     (paradigm interpreted)
     (level high)
     (object-oriented no)
+    (microsoft yes)
     =>
     (assert (goal "Visual Basic Script"))
 )
@@ -149,6 +165,7 @@
     (paradigm interpreted)
     (level high)
     (object-oriented no)
+    (microsoft no)
     =>
     (assert (goal "BASH"))
 )
@@ -158,6 +175,7 @@
     (paradigm interpreted)
     (level high)
     (object-oriented yes)
+    (microsoft no)
     =>
     (assert (goal "JavaScript"))
 )
@@ -166,6 +184,7 @@
     (not (goal ?))
     (level low)
     (object-oriented no)
+    (microsoft no)
     =>
     (assert (goal "Machine code"))
 )
@@ -175,6 +194,7 @@
     (paradigm compiled)
     (level low)
     (object-oriented no)
+    (microsoft no)
     =>
     (assert (goal "Assembler"))
 )
@@ -184,6 +204,7 @@
     (paradigm compiled)
     (level high)
     (object-oriented no)
+    (microsoft no)
     =>
     (assert (goal "Pascal"))
 )
@@ -193,6 +214,7 @@
     (paradigm interpreted)
     (level high)
     (object-oriented yes)
+    (microsoft no)
     =>
     (assert (goal "Python"))
 )
@@ -202,6 +224,7 @@
     (paradigm compiled)
     (level high)
     (object-oriented no)
+    (microsoft no)
     =>
     (assert (goal "Lisp"))
 )
