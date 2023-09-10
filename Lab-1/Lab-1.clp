@@ -96,57 +96,67 @@
     (not (goal ?))
     (paradigm compiled)
     =>
+    (assert (goal "C#"))
 )
 
 (defrule g4 "PowerShell"
     (not (goal ?))
     (paradigm interpreted)
     =>
+    (assert (goal "PowerShell"))
 )
 
 (defrule g5 "Visual Basic Script"
     (not (goal ?))
     (paradigm interpreted)
     =>
+    (assert (goal "Visual Basic Script"))
 )
 
 (defrule g6 "BASH"
     (not (goal ?))
     (paradigm interpreted)
     =>
+    (assert (goal "BASH"))
 )
 
 (defrule g7 "JavaScript"
     (not (goal ?))
     (paradigm interpreted)
     =>
+    (assert (goal "JavaScript"))
 )
 
 (defrule g8 "Machine Code"
     (not (goal ?))
     =>
+    (assert (goal "Machine code"))
 )
 
 (defrule g9 "Assembler"
     (not (goal ?))
     (paradigm compiled)
     =>
+    (assert (goal "Assembler"))
 )
 
 (defrule g10 "Pascal"
     (not (goal ?))
     (paradigm compiled)
     =>
+    (assert (goal "Pascal"))
 )
 
 (defrule g11 "Python"
     (not (goal ?))
     (paradigm interpreted)
     =>
+    (assert (goal "Python"))
 )
 
 (defrule g12 "Lisp"
     (not (goal ?))
     (paradigm compiled)
     =>
+    (assert (goal "Lisp"))
 )
