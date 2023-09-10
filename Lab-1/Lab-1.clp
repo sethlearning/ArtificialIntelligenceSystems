@@ -119,6 +119,18 @@
     )
 )
 
+(defrule r6 "Web development"
+    (declare (salience 0))
+    (not (goal ?))
+    =>
+    (if (ask-question-binary "Вы предпочитаете язык для web-разработки? ") then
+        (assert (webdevelopment yes))
+    else
+        (assert (webdevelopment no))
+    
+    )
+)
+
 ; Knowledge base: consequents
 ;---------------------------------------------------------
 (defrule g1 "C"
@@ -128,6 +140,7 @@
     (object-oriented no)
     (microsoft no)
     (interactive no)
+    (webdevelopment no)
     =>
     (assert (goal "C"))
 )
@@ -139,6 +152,7 @@
     (object-oriented yes)
     (microsoft no)
     (interactive no)
+    (webdevelopment no)
     =>
     (assert (goal "C++"))
 )
@@ -150,6 +164,7 @@
     (object-oriented yes)
     (microsoft yes)
     (interactive no)
+    (webdevelopment no)
     =>
     (assert (goal "C#"))
 )
@@ -161,6 +176,7 @@
     (object-oriented yes)
     (microsoft yes)
     (interactive yes)
+    (webdevelopment no)
     =>
     (assert (goal "PowerShell"))
 )
@@ -172,6 +188,7 @@
     (object-oriented no)
     (microsoft yes)
     (interactive no)
+    (webdevelopment no)
     =>
     (assert (goal "Visual Basic Script"))
 )
@@ -183,6 +200,7 @@
     (object-oriented no)
     (microsoft no)
     (interactive yes)
+    (webdevelopment no)
     =>
     (assert (goal "BASH"))
 )
@@ -194,6 +212,7 @@
     (object-oriented yes)
     (microsoft no)
     (interactive no)
+    (webdevelopment yes)
     =>
     (assert (goal "JavaScript"))
 )
@@ -204,6 +223,7 @@
     (object-oriented no)
     (microsoft no)
     (interactive no)
+    (webdevelopment no)
     =>
     (assert (goal "Machine code"))
 )
@@ -215,6 +235,7 @@
     (object-oriented no)
     (microsoft no)
     (interactive no)
+    (webdevelopment no)
     =>
     (assert (goal "Assembler"))
 )
@@ -226,6 +247,7 @@
     (object-oriented no)
     (microsoft no)
     (interactive no)
+    (webdevelopment no)
     =>
     (assert (goal "Pascal"))
 )
@@ -237,6 +259,7 @@
     (object-oriented yes)
     (microsoft no)
     (interactive yes)
+    (webdevelopment yes)
     =>
     (assert (goal "Python"))
 )
@@ -248,6 +271,7 @@
     (object-oriented no)
     (microsoft no)
     (interactive no)
+    (webdevelopment no)
     =>
     (assert (goal "Lisp"))
 )
