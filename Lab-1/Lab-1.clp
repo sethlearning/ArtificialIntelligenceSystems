@@ -33,6 +33,14 @@
     ?answer
 )
 
+; Function accepting "yes" or "no"
+(deffunction ask-question-binary (?question)
+    (bind ?response (ask-question-list ?question true yes y да д false no n нет н))
+    (if (or (eq ?response true)(eq ?response yes)(eq ?response y)(eq ?response да)(eq ?response д))
+        then TRUE
+        else FALSE
+    )
+)
 
 ; Knowledge base - antecedents
 ;---------------------------------------------------------
