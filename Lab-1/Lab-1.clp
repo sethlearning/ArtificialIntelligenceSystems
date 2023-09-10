@@ -130,7 +130,18 @@
     )
 )
 
-(defrule r7 "Indentation"
+(defrule r7 "Code teaching"
+    (declare (salience 0))
+    (not (goal ?))
+    =>
+    (if (ask-question-binary "Вы предпочитаете языки, используемые для начального обучения программированию? ") then
+        (assert (codeteaching yes))
+    else
+        (assert (codeteaching no))
+    )
+)
+
+(defrule r8 "Indentation"
     (declare (salience 0))
     (not (goal ?))
     =>
@@ -138,6 +149,17 @@
         (assert (indentation yes))
     else
         (assert (indentation no))
+    )
+)
+
+(defrule r9 "Short commands"
+    (declare (salience 0))
+    (not (goal ?))
+    =>
+    (if (ask-question-binary "Вы предпочитаете короткие команды? ") then
+        (assert (shortcommands yes))
+    else
+        (assert (shortcommands no))
     )
 )
 
@@ -151,7 +173,9 @@
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (codeteaching no)
     (indentation no)
+    (shortcommands no)
     =>
     (assert (goal "C"))
 )
@@ -164,7 +188,9 @@
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (codeteaching no)
     (indentation no)
+    (shortcommands no)
     =>
     (assert (goal "C++"))
 )
@@ -177,7 +203,9 @@
     (microsoft yes)
     (interactive no)
     (webdevelopment no)
+    (codeteaching no)
     (indentation no)
+    (shortcommands no)
     =>
     (assert (goal "C#"))
 )
@@ -190,7 +218,9 @@
     (microsoft yes)
     (interactive yes)
     (webdevelopment no)
+    (codeteaching no)
     (indentation no)
+    (shortcommands no)
     =>
     (assert (goal "PowerShell"))
 )
@@ -203,7 +233,9 @@
     (microsoft yes)
     (interactive no)
     (webdevelopment no)
+    (codeteaching no)
     (indentation no)
+    (shortcommands no)
     =>
     (assert (goal "Visual Basic Script"))
 )
@@ -216,7 +248,9 @@
     (microsoft no)
     (interactive yes)
     (webdevelopment no)
+    (codeteaching no)
     (indentation no)
+    (shortcommands no)
     =>
     (assert (goal "BASH"))
 )
@@ -229,19 +263,24 @@
     (microsoft no)
     (interactive no)
     (webdevelopment yes)
+    (codeteaching no)
     (indentation no)
+    (shortcommands no)
     =>
     (assert (goal "JavaScript"))
 )
 
 (defrule g8 "Machine Code"
     (not (goal ?))
+    (paradigm ?)
     (level low)
     (object-oriented no)
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (codeteaching no)
     (indentation no)
+    (shortcommands no)
     =>
     (assert (goal "Machine code"))
 )
@@ -254,7 +293,9 @@
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (codeteaching no)
     (indentation no)
+    (shortcommands yes)
     =>
     (assert (goal "Assembler"))
 )
@@ -267,7 +308,9 @@
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (codeteaching yes)
     (indentation no)
+    (shortcommands no)
     =>
     (assert (goal "Pascal"))
 )
@@ -280,7 +323,9 @@
     (microsoft no)
     (interactive yes)
     (webdevelopment yes)
+    (codeteaching yes)
     (indentation yes)
+    (shortcommands no)
     =>
     (assert (goal "Python"))
 )
@@ -293,7 +338,9 @@
     (microsoft no)
     (interactive no)
     (webdevelopment no)
+    (codeteaching no)
     (indentation no)
+    (shortcommands no)
     =>
     (assert (goal "Lisp"))
 )
