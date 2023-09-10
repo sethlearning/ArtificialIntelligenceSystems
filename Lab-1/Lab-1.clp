@@ -79,11 +79,11 @@
     (declare (salience 0))
     (not (goal ?))
     =>
-    (bind ?response (ask-question-list "Вы предпочитаете языки ВЫСОКОГО (1) уровня или НИЗКОГО (2)? (Введите 1 или 2): " 1 2))
+    (bind ?response (ask-question-list "Вы предпочитаете языки  НИЗКОГО (1) уровня или ВЫСОКОГО (2)? (Введите 1 или 2): " 1 2))
     (if (eq ?response 1) then
-        (assert (level high)))
-    (if (eq ?response 2) then
         (assert (level low)))
+    (if (eq ?response 2) then
+        (assert (level high)))
 )
 
 (defrule r3 "Is language object oriented"
@@ -108,6 +108,17 @@
     )
 )
 
+(defrule r5 "Interactive mode"
+    (declare (salience 0))
+    (not (goal ?))
+    =>
+    (if (ask-question-binary "Вы предпочитаете когда язык подерживает интерактивный режим работы? ") then
+        (assert (interactive yes))
+    else
+        (assert (interactive no))
+    )
+)
+
 ; Knowledge base: consequents
 ;---------------------------------------------------------
 (defrule g1 "C"
@@ -116,6 +127,7 @@
     (level low)
     (object-oriented no)
     (microsoft no)
+    (interactive no)
     =>
     (assert (goal "C"))
 )
@@ -126,6 +138,7 @@
     (level low)
     (object-oriented yes)
     (microsoft no)
+    (interactive no)
     =>
     (assert (goal "C++"))
 )
@@ -136,6 +149,7 @@
     (level high)
     (object-oriented yes)
     (microsoft yes)
+    (interactive no)
     =>
     (assert (goal "C#"))
 )
@@ -146,6 +160,7 @@
     (level high)
     (object-oriented yes)
     (microsoft yes)
+    (interactive yes)
     =>
     (assert (goal "PowerShell"))
 )
@@ -156,6 +171,7 @@
     (level high)
     (object-oriented no)
     (microsoft yes)
+    (interactive no)
     =>
     (assert (goal "Visual Basic Script"))
 )
@@ -166,6 +182,7 @@
     (level high)
     (object-oriented no)
     (microsoft no)
+    (interactive yes)
     =>
     (assert (goal "BASH"))
 )
@@ -176,6 +193,7 @@
     (level high)
     (object-oriented yes)
     (microsoft no)
+    (interactive no)
     =>
     (assert (goal "JavaScript"))
 )
@@ -185,6 +203,7 @@
     (level low)
     (object-oriented no)
     (microsoft no)
+    (interactive no)
     =>
     (assert (goal "Machine code"))
 )
@@ -195,6 +214,7 @@
     (level low)
     (object-oriented no)
     (microsoft no)
+    (interactive no)
     =>
     (assert (goal "Assembler"))
 )
@@ -205,6 +225,7 @@
     (level high)
     (object-oriented no)
     (microsoft no)
+    (interactive no)
     =>
     (assert (goal "Pascal"))
 )
@@ -215,6 +236,7 @@
     (level high)
     (object-oriented yes)
     (microsoft no)
+    (interactive yes)
     =>
     (assert (goal "Python"))
 )
@@ -225,6 +247,7 @@
     (level high)
     (object-oriented no)
     (microsoft no)
+    (interactive no)
     =>
     (assert (goal "Lisp"))
 )
