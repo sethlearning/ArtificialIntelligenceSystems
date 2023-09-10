@@ -12,7 +12,7 @@
     (declare (salience -20))
     => 
     (printout t crlf crlf)
-    (printout t "Благодарим за использование экспертной системы")
+    (printout t "Благодарим за использование экспертной системы.")
     (printout t crlf crlf)
 )
 
@@ -75,12 +75,23 @@
         (assert (paradigm interpreted)))
 )
 
+(defrule r2 "Language level: high or low"
+    (declare (salience 0))
+    (not (goal ?))
+    =>
+    (bind ?response (ask-question-list "Вы предпочитаете языки ВЫСОКОГО (1) уровня или НИЗКОГО (2)? (Введите 1 или 2): " 1 2))
+    (if (eq ?response 1) then
+        (assert (level high)))
+    (if (eq ?response 2) then
+        (assert (level low)))
+)
 
 ; Knowledge base: consequents
 ;---------------------------------------------------------
 (defrule g1 "C"
     (not (goal ?))
     (paradigm compiled)
+    (level low)
     =>
     (assert (goal "C"))
 )
@@ -88,6 +99,7 @@
 (defrule g2 "C++"
     (not (goal ?))
     (paradigm compiled)
+    (level low)
     =>
     (assert (goal "C++"))
 )
@@ -95,6 +107,7 @@
 (defrule g3 "C#"
     (not (goal ?))
     (paradigm compiled)
+    (level high)
     =>
     (assert (goal "C#"))
 )
@@ -102,6 +115,7 @@
 (defrule g4 "PowerShell"
     (not (goal ?))
     (paradigm interpreted)
+    (level high)
     =>
     (assert (goal "PowerShell"))
 )
@@ -109,6 +123,7 @@
 (defrule g5 "Visual Basic Script"
     (not (goal ?))
     (paradigm interpreted)
+    (level high)
     =>
     (assert (goal "Visual Basic Script"))
 )
@@ -116,6 +131,7 @@
 (defrule g6 "BASH"
     (not (goal ?))
     (paradigm interpreted)
+    (level high)
     =>
     (assert (goal "BASH"))
 )
@@ -123,12 +139,14 @@
 (defrule g7 "JavaScript"
     (not (goal ?))
     (paradigm interpreted)
+    (level high)
     =>
     (assert (goal "JavaScript"))
 )
 
 (defrule g8 "Machine Code"
     (not (goal ?))
+    (level low)
     =>
     (assert (goal "Machine code"))
 )
@@ -136,6 +154,7 @@
 (defrule g9 "Assembler"
     (not (goal ?))
     (paradigm compiled)
+    (level low)
     =>
     (assert (goal "Assembler"))
 )
@@ -143,6 +162,7 @@
 (defrule g10 "Pascal"
     (not (goal ?))
     (paradigm compiled)
+    (level high)
     =>
     (assert (goal "Pascal"))
 )
@@ -150,6 +170,7 @@
 (defrule g11 "Python"
     (not (goal ?))
     (paradigm interpreted)
+    (level high)
     =>
     (assert (goal "Python"))
 )
@@ -157,6 +178,7 @@
 (defrule g12 "Lisp"
     (not (goal ?))
     (paradigm compiled)
+    (level high)
     =>
     (assert (goal "Lisp"))
 )
