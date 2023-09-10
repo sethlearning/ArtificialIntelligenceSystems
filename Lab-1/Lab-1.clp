@@ -80,36 +80,45 @@
 ;---------------------------------------------------------
 (defrule g1 "C"
     (not (goal ?))
+    (paradigm compiled)
     =>
+    (assert (goal "C"))
 )
 
 (defrule g2 "C++"
     (not (goal ?))
+    (paradigm compiled)
     =>
+    (assert (goal "C++"))
 )
 
 (defrule g3 "C#"
     (not (goal ?))
+    (paradigm compiled)
     =>
 )
 
 (defrule g4 "PowerShell"
     (not (goal ?))
+    (paradigm interpreted)
     =>
 )
 
 (defrule g5 "Visual Basic Script"
     (not (goal ?))
+    (paradigm interpreted)
     =>
 )
 
 (defrule g6 "BASH"
     (not (goal ?))
+    (paradigm interpreted)
     =>
 )
 
 (defrule g7 "JavaScript"
     (not (goal ?))
+    (paradigm interpreted)
     =>
 )
 
@@ -120,20 +129,24 @@
 
 (defrule g9 "Assembler"
     (not (goal ?))
+    (paradigm compiled)
     =>
 )
 
 (defrule g10 "Pascal"
     (not (goal ?))
+    (paradigm compiled)
     =>
 )
 
 (defrule g11 "Python"
     (not (goal ?))
+    (paradigm interpreted)
     =>
 )
 
 (defrule g12 "Lisp"
     (not (goal ?))
+    (paradigm compiled)
     =>
 )
