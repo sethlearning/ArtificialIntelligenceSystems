@@ -11,7 +11,7 @@
 (defrule system-finish "Message on the end of the script"
     (declare (salience -20))
     => 
-    (printout t crlf crlf)
+    (printout t crlf)
     (printout t "Благодарим за использование экспертной системы.")
     (printout t crlf crlf)
 )
@@ -156,10 +156,32 @@
     (declare (salience 0))
     (not (goal ?))
     =>
-    (if (ask-question-binary "Вы предпочитаете короткие команды? ") then
+    (if (ask-question-binary "Вы предпочитаете короткие команды в виде аббревиатур? ") then
         (assert (shortcommands yes))
     else
         (assert (shortcommands no))
+    )
+)
+
+(defrule r10 "Only ABCDEF letters"
+    (declare (salience 0))
+    (not (goal ?))
+    =>
+    (if (ask-question-binary "Вы предпочитаете использовать только цифры и следующие буквы: ABCDEF? ") then
+        (assert (abcdeflettersonly yes))
+    else
+        (assert (abcdeflettersonly no))
+    )
+)
+
+(defrule r11 "Short commands"
+    (declare (salience 0))
+    (not (goal ?))
+    =>
+    (if (ask-question-binary "Вы предпочитаете языки, в которых много круглых скобок? ") then
+        (assert (lotofparentheses yes))
+    else
+        (assert (lotofparentheses no))
     )
 )
 
@@ -176,6 +198,8 @@
     (codeteaching no)
     (indentation no)
     (shortcommands no)
+    (abcdeflettersonly no)
+    (lotofparentheses no)
     =>
     (assert (goal "C"))
 )
@@ -191,6 +215,8 @@
     (codeteaching no)
     (indentation no)
     (shortcommands no)
+    (abcdeflettersonly no)
+    (lotofparentheses no)
     =>
     (assert (goal "C++"))
 )
@@ -206,6 +232,8 @@
     (codeteaching no)
     (indentation no)
     (shortcommands no)
+    (abcdeflettersonly no)
+    (lotofparentheses no)
     =>
     (assert (goal "C#"))
 )
@@ -221,6 +249,8 @@
     (codeteaching no)
     (indentation no)
     (shortcommands no)
+    (abcdeflettersonly no)
+    (lotofparentheses no)
     =>
     (assert (goal "PowerShell"))
 )
@@ -236,6 +266,8 @@
     (codeteaching no)
     (indentation no)
     (shortcommands no)
+    (abcdeflettersonly no)
+    (lotofparentheses no)
     =>
     (assert (goal "Visual Basic Script"))
 )
@@ -251,6 +283,8 @@
     (codeteaching no)
     (indentation no)
     (shortcommands no)
+    (abcdeflettersonly no)
+    (lotofparentheses no)
     =>
     (assert (goal "BASH"))
 )
@@ -266,6 +300,8 @@
     (codeteaching no)
     (indentation no)
     (shortcommands no)
+    (abcdeflettersonly no)
+    (lotofparentheses no)
     =>
     (assert (goal "JavaScript"))
 )
@@ -281,6 +317,8 @@
     (codeteaching no)
     (indentation no)
     (shortcommands no)
+    (abcdeflettersonly yes)
+    (lotofparentheses no)
     =>
     (assert (goal "Machine code"))
 )
@@ -296,6 +334,8 @@
     (codeteaching no)
     (indentation no)
     (shortcommands yes)
+    (abcdeflettersonly no)
+    (lotofparentheses no)
     =>
     (assert (goal "Assembler"))
 )
@@ -311,6 +351,8 @@
     (codeteaching yes)
     (indentation no)
     (shortcommands no)
+    (abcdeflettersonly no)
+    (lotofparentheses no)
     =>
     (assert (goal "Pascal"))
 )
@@ -326,6 +368,8 @@
     (codeteaching yes)
     (indentation yes)
     (shortcommands no)
+    (abcdeflettersonly no)
+    (lotofparentheses no)
     =>
     (assert (goal "Python"))
 )
@@ -341,6 +385,8 @@
     (codeteaching no)
     (indentation no)
     (shortcommands no)
+    (abcdeflettersonly no)
+    (lotofparentheses yes)
     =>
     (assert (goal "Lisp"))
 )
