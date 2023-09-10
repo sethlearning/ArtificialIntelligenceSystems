@@ -42,6 +42,26 @@
     )
 )
 
+; results
+;---------------------------------------------------------
+; Result found
+(defrule print-goal ""
+    (declare (salience 10))
+    (goal ?item)
+    =>
+    (printout t crlf crlf)
+    (printout t "Вам рекомендуется следующий язык программирования: ")
+    (format t "%n%s%n%n" ?item)
+)
+
+; Result not found
+(defrule no-goal ""
+    (declare (salience -10))
+    (not (goal ?))
+    =>
+    (assert (goal "Подходящий именно вам язык программирования не может быть подобран. Учите все."))
+)
+
 ; Knowledge base - antecedents
 ;---------------------------------------------------------
 (defrule r1 ""
