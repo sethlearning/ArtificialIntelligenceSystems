@@ -35,7 +35,38 @@ function inGet
             # Get class list
             'class'
             {
-                $xml.Ontology.Declaration.Class.IRI.Trim('#')
+                # Define array of result objects
+                $result = @()
+
+                # Create objects with ClassName property
+                foreach ($class in $xml.Ontology.Declaration.Class.IRI.Trim('#'))
+                {
+                    $result += [pscustomobject]@{ClassName = $class}
+                }
+
+                # If there are class hierarchy
+                if ($xml.Ontology.SubClassOf)
+                {
+                    # For each object in the result array
+                    foreach ($object in $result)
+                    {
+                        # Find corresponding SubClassOf node
+                        $hierarchynode = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI.Trim('#') -eq $object.ClassName}
+                        # If such node exists
+                        if ($hierarchynode)
+                        {
+                            # Add Parent property with parent class name
+                            $object | Add-Member -MemberType NoteProperty -Name Parent -Value $hierarchynode.Class[1].IRI.Trim('#')
+                        }
+                        else
+                        {
+                            # Add parent property with the "Top" value
+                            $object | Add-Member -MemberType NoteProperty -Name Parent -Value "Top"
+                        }
+                    }
+                }
+                # $xml.Ontology.Declaration.Class.IRI.Trim('#')
+                $result
             }
             # Get instance list
             'instance'
