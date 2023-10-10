@@ -71,7 +71,15 @@ function inGet
             # Get instance list
             'instance'
             {
-                $xml.Ontology.Declaration.NamedIndividual.IRI.Trim('#')
+                $result = @()
+
+                foreach ($instance in $xml.Ontology.Declaration.NamedIndividual.IRI.Trim('#'))
+                {
+                    $result += [pscustomobject]@{InstanceName = $instance}
+                }
+
+                $result
+                # $xml.Ontology.Declaration.NamedIndividual.IRI.Trim('#')
             }
         }
     }
