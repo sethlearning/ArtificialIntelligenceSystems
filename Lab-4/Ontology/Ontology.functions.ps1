@@ -65,7 +65,7 @@ function inGet
                         }
                     }
                 }
-                # $xml.Ontology.Declaration.Class.IRI.Trim('#')
+
                 $result
             }
             # Get instance list
@@ -79,7 +79,6 @@ function inGet
                 }
 
                 $result
-                # $xml.Ontology.Declaration.NamedIndividual.IRI.Trim('#')
             }
         }
     }
