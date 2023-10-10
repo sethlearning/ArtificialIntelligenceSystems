@@ -55,7 +55,8 @@ function New-OwlClass
 {
     Param(
         [string]$FileName,
-        [string]$ClassName
+        [string]$ClassName,
+        [string]$ParentClassName
     )
 
     # Resolve path
@@ -76,6 +77,13 @@ function New-OwlClass
         }
         else
         {
+            # If Parent class name is specified and there are no such a class
+            if ($ParentClassName -and $ParentClassName -notin $xml.Ontology.Declaration.Class.IRI.Trim('#'))
+            {
+                Write-Output -InputObject "There are no such a parent class"
+                return
+            }
+
             # Create Declaration node with default namespace URI
             $declaration = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Declaration", $xml.DocumentElement.NamespaceURI)
             
@@ -90,6 +98,26 @@ function New-OwlClass
 
             # Append Declaration node as child to Ontology node
             $xml.Ontology.AppendChild($declaration) | Out-Null
+
+            if ($ParentClassName)
+            {
+                # Create SubClassOf node
+                $subclassof = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "SubClassOf", $xml.DocumentElement.NamespaceURI)
+                # Create child Class node
+                $childclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
+                # Set child Class node attribute
+                $childclass.SetAttribute("IRI", "#" + $ClassName)
+                # Create parent Class node
+                $parentclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
+                # Set parent Class node attribute
+                $parentclass.SetAttribute("IRI", "#" + $ParentClassName)
+                # Append child Class node as child to SubClassOf node
+                $subclassof.AppendChild($childclass) | Out-Null
+                # Append parent Class node as child to SubClassOf node
+                $subclassof.AppendChild($parentclass) | Out-Null
+                # Append SubClassOf node as child to Ontology node
+                $xml.Ontology.AppendChild($subclassof) | Out-Null
+            }
 
             # Save file
             $xml.Save($path)
