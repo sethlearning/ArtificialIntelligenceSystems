@@ -13,6 +13,7 @@ function Get-OwlInstance
         # Load XML file
         $xml.Load($path)
 
+        # Define array of result objects
         $instancelist = @()
 
         foreach ($instance in $xml.Ontology.Declaration.NamedIndividual.IRI.Trim('#'))
@@ -20,6 +21,15 @@ function Get-OwlInstance
             $instancelist += [pscustomobject]@{InstanceName = $instance}
         }
 
+        # If there are class hierarchy
+        if ($xml.Ontology.Declaration.Class)
+        {
+            # For each object in the result array
+            foreach ($instance in $instancelist)
+            {
+                
+            }
+        }
         $instancelist
     }
     else
