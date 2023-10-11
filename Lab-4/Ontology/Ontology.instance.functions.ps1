@@ -13,14 +13,14 @@ function Get-OwlInstance
         # Load XML file
         $xml.Load($path)
 
-        $result = @()
+        $instancelist = @()
 
         foreach ($instance in $xml.Ontology.Declaration.NamedIndividual.IRI.Trim('#'))
         {
-            $result += [pscustomobject]@{InstanceName = $instance}
+            $instancelist += [pscustomobject]@{InstanceName = $instance}
         }
 
-        $result
+        $instancelist
     }
     else
     {
