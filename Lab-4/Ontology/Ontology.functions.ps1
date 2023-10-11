@@ -39,9 +39,9 @@ function inGet
                 $result = @()
 
                 # Create objects with ClassName property
-                foreach ($class in $xml.Ontology.Declaration.Class.IRI.Trim('#'))
+                foreach ($class in $xml.Ontology.Declaration.Class.IRI)
                 {
-                    $result += [pscustomobject]@{ClassName = $class}
+                    $result += [pscustomobject]@{ClassName = $class.Trim("#")}
                 }
 
                 # If there are class hierarchy
