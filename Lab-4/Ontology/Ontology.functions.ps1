@@ -2,23 +2,6 @@ function Get-OwlClass
 {
     Param([string]$FileName)
 
-    inGet -Filename $FileName -Entity 'class'
-}
-
-function Get-OwlInstance
-{
-    Param([string]$FileName)
-    
-    inGet -Filename $FileName -Entity 'instance'
-}
-
-function inGet
-{
-    Param(
-        [string]$FileName,
-        [string]$Entity
-    )
-
     # Resolve path
     $path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea
 
@@ -30,57 +13,69 @@ function inGet
         # Load XML file
         $xml.Load($path)
 
-        switch ($Entity)
+        # Define array of result objects
+        $result = @()
+
+        # Create objects with ClassName property
+        foreach ($class in $xml.Ontology.Declaration.Class.IRI)
         {
-            # Get class list
-            'class'
+            $result += [pscustomobject]@{ClassName = $class.Trim("#")}
+        }
+
+        # If there are class hierarchy
+        if ($xml.Ontology.SubClassOf)
+        {
+            # For each object in the result array
+            foreach ($object in $result)
             {
-                # Define array of result objects
-                $result = @()
-
-                # Create objects with ClassName property
-                foreach ($class in $xml.Ontology.Declaration.Class.IRI)
+                # Find corresponding SubClassOf node
+                $hierarchynode = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI.Trim('#') -eq $object.ClassName}
+                # If such node exists
+                if ($hierarchynode)
                 {
-                    $result += [pscustomobject]@{ClassName = $class.Trim("#")}
+                    # Add Parent property with parent class name
+                    $object | Add-Member -MemberType NoteProperty -Name Parent -Value $hierarchynode.Class[1].IRI.Trim('#')
                 }
-
-                # If there are class hierarchy
-                if ($xml.Ontology.SubClassOf)
+                else
                 {
-                    # For each object in the result array
-                    foreach ($object in $result)
-                    {
-                        # Find corresponding SubClassOf node
-                        $hierarchynode = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI.Trim('#') -eq $object.ClassName}
-                        # If such node exists
-                        if ($hierarchynode)
-                        {
-                            # Add Parent property with parent class name
-                            $object | Add-Member -MemberType NoteProperty -Name Parent -Value $hierarchynode.Class[1].IRI.Trim('#')
-                        }
-                        else
-                        {
-                            # Add parent property with the "Top" value
-                            $object | Add-Member -MemberType NoteProperty -Name Parent -Value "Top"
-                        }
-                    }
+                    # Add parent property with the "Top" value
+                    $object | Add-Member -MemberType NoteProperty -Name Parent -Value "Top"
                 }
-
-                $result
-            }
-            # Get instance list
-            'instance'
-            {
-                $result = @()
-
-                foreach ($instance in $xml.Ontology.Declaration.NamedIndividual.IRI.Trim('#'))
-                {
-                    $result += [pscustomobject]@{InstanceName = $instance}
-                }
-
-                $result
             }
         }
+
+        $result
+    }
+    else
+    {
+        # Resolve path error
+        Write-Output -InputObject $ea.Exception.Message
+    }
+}
+
+function Get-OwlInstance
+{
+    Param([string]$FileName)
+    
+    # Resolve path
+    $path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea
+
+    # If path exists
+    if ($path)
+    {
+        # Create new object
+        $xml = New-Object -TypeName System.Xml.XmlDocument
+        # Load XML file
+        $xml.Load($path)
+
+        $result = @()
+
+        foreach ($instance in $xml.Ontology.Declaration.NamedIndividual.IRI.Trim('#'))
+        {
+            $result += [pscustomobject]@{InstanceName = $instance}
+        }
+
+        $result
     }
     else
     {
