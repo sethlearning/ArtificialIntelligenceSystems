@@ -14,37 +14,35 @@ function Get-OwlClass
         $xml.Load($path)
 
         # Define array of result objects
-        $result = @()
+        $classlist = @()
 
         # Create objects with ClassName property
         foreach ($class in $xml.Ontology.Declaration.Class.IRI)
         {
-            $result += [pscustomobject]@{ClassName = $class.Trim("#")}
+            $classlist += [pscustomobject]@{ClassName = $class.Trim("#")}
         }
 
         # If there are class hierarchy
         if ($xml.Ontology.SubClassOf)
         {
             # For each object in the result array
-            foreach ($object in $result)
+            foreach ($class in $classlist)
             {
                 # Find corresponding SubClassOf node
-                $hierarchynode = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI.Trim('#') -eq $object.ClassName}
-                # If such node exists
-                if ($hierarchynode)
+                if ($node = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI -eq "#$($class.ClassName)"})
                 {
                     # Add Parent property with parent class name
-                    $object | Add-Member -MemberType NoteProperty -Name Parent -Value $hierarchynode.Class[1].IRI.Trim('#')
+                    $class | Add-Member -MemberType NoteProperty -Name Parent -Value $node.Class[1].IRI.Trim('#')
                 }
                 else
                 {
                     # Add parent property with the "Top" value
-                    $object | Add-Member -MemberType NoteProperty -Name Parent -Value "Top"
+                    $class | Add-Member -MemberType NoteProperty -Name Parent -Value "Top"
                 }
             }
         }
 
-        $result
+        $classlist
     }
     else
     {
