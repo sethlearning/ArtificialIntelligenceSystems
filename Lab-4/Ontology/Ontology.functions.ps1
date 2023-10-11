@@ -188,31 +188,28 @@ function Remove-OwlClass
         $xml.Load($path)
 
         # If class exists
-        if ($ClassName -in $xml.Ontology.Declaration.Class.IRI.Trim('#'))
+        if ("#$ClassName" -in $xml.Ontology.Declaration.Class.IRI)
         {
                 # If there are objects of the class
-            if ($ClassName -in $xml.Ontology.ClassAssertion.Class.IRI.Trim('#') -or
+            if ("#$ClassName" -in $xml.Ontology.ClassAssertion.Class.IRI -or
                 # If there are data properties with domain of the class
-                $ClassName -in $xml.Ontology.DataPropertyDomain.Class.IRI.Trim('#') -or
+                "#$ClassName" -in $xml.Ontology.DataPropertyDomain.Class.IRI -or
                 # If the class is parent to another class
-                ($xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[1].IRI.Trim('#') -eq $ClassName}) )
+                ($xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[1].IRI -eq "#$ClassName"}) )
             {
                 Write-Output -InputObject "Class is associated with another ontology elements"
             }
             else
             {
-                # If there are sublasses defined
-                if ($xml.Ontology.SubClassOf)
+                # If the class is a child of another class
+                if ($node = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI -eq "#$ClassName"})
                 {
-                    # If the class is a child of another class
-                    if ($node = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI.Trim('#') -eq $ClassName})
-                    {
-                        # Remove class parent-child relationship node from Ontology node
-                        $xml.Ontology.RemoveChild($node) | Out-Null
-                    }
+                    # Remove class parent-child relationship node from Ontology node
+                    $xml.Ontology.RemoveChild($node) | Out-Null
                 }
+
                 # Get class declaration node
-                $node = $xml.Ontology.Declaration | Where-Object -Property "Class" | Where-Object -FilterScript { $PSItem.Class.IRI.Trim('#') -eq $ClassName}
+                $node = $xml.Ontology.Declaration | Where-Object -Property "Class" | Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"}
                 # Remove class declaration node from children of Ontology node
                 $xml.Ontology.RemoveChild($node) | Out-Null
                 # Save file
