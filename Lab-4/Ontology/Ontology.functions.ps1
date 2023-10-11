@@ -109,14 +109,14 @@ function New-OwlClass
         $xml.Load($path)
 
         # If class exists
-        if ($ClassName -in $xml.Ontology.Declaration.Class.IRI.Trim('#'))
+        if ("#$ClassName" -in $xml.Ontology.Declaration.Class.IRI)
         {
             Write-Output -InputObject "The class is already exist"
         }
         else
         {
             # If Parent class name is specified and there are no such a class
-            if ($ParentClassName -and $ParentClassName -notin $xml.Ontology.Declaration.Class.IRI.Trim('#'))
+            if ($ParentClassName -and "#$ParentClassName" -notin $xml.Ontology.Declaration.Class.IRI)
             {
                 Write-Output -InputObject "There are no such a parent class"
                 return
