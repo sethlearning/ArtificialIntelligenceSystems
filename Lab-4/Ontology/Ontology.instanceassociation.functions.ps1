@@ -84,3 +84,75 @@ function Add-OwlInstanceAssociation
         Write-Output -InputObject "File name is not specified"
     }
 }
+
+function Remove-OwlInstanceAssociation
+{
+    Param (
+        [string]$FileName,
+        [string]$InstanceName,
+        [string[]]$ClassName
+    )
+
+    # If FileName is specified
+    if ($FileName)
+    {
+        # If path exists
+        if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
+        {
+            # Create new object
+            $xml = New-Object -TypeName System.Xml.XmlDocument
+            # Load XML file
+            $xml.Load($path)
+
+            # If instance exists
+            if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
+            {
+                # For each class name
+                foreach ($class in $ClassName)
+                {
+                    # If class is exists
+                    if ("#$class" -in $xml.Ontology.Declaration.Class.IRI)
+                    {
+                        # If the instance is associated with the class
+                        if ($node = $xml.Ontology.ClassAssertion |
+                            Where-Object -Property NamedIndividual |
+                            Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
+                            Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$class"})
+                        {
+                            # Remove ClassAssociation from Ontology node
+                            $xml.Ontology.RemoveChild($node) | Out-Null
+                            Write-Output -InputObject "Instance `"$InstanceName`" is now dissociated from the class `"$class`""
+                        }
+                        else
+                        {
+                            # Instance is not associated with the class
+                            Write-Output -InputObject "Instance `"$InstanceName`" is not associated with the class `"$class`""
+                        }
+                    }
+                    else
+                    {
+                        # Class is not exist
+                        Write-Output -InputObject "Class `"$class`" is not exist"
+                    }
+                }
+                # Save file
+                $xml.Save($path)
+            }
+            else
+            {
+                # Instance is not found
+                Write-Output -InputObject "There are no such an instance"
+            }
+        }
+        else
+        {
+            # Resolve path error
+            Write-Output -InputObject $ea.Exception.Message
+        }
+    }
+    else
+    {
+        # FileName is not specified
+        Write-Output -InputObject "File name is not specified"
+    }
+}
