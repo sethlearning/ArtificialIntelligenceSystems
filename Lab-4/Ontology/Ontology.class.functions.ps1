@@ -5,11 +5,8 @@ function Get-OwlClass
     # If FileName is specified
     if ($FileName)
     {
-        # Resolve path
-        $path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea
-
         # If path exists
-        if ($path)
+        if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
             # Create new object
             $xml = New-Object -TypeName System.Xml.XmlDocument
@@ -71,11 +68,8 @@ function New-OwlClass
     # If FileName is specified
     if ($FileName)
     {
-        # Resolve path
-        $path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea
-
         # If path exists
-        if ($path)
+        if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
             # Create new object
             $xml = New-Object -TypeName System.Xml.XmlDocument
@@ -158,11 +152,8 @@ function Remove-OwlClass
     # If FileName is specified
     if ($FileName)
     {
-        # Resolve path
-        $path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea
-
         # If path exists
-        if ($path)
+        if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
             # Create new object
             $xml = New-Object -TypeName System.Xml.XmlDocument
@@ -228,11 +219,8 @@ function Rename-OwlClass
     # If FileName is specified
     if ($FileName)
     {
-        # Resolve path
-        $path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea
-
         # If path exists
-        if ($path)
+        if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
             # Create new object
             $xml = New-Object -TypeName System.Xml.XmlDocument
