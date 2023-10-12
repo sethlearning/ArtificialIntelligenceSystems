@@ -199,86 +199,86 @@ function Rename-OwlClass
         [string]$NewClassName
     )
 
-        # Resolve path
-        $path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea
+    # Resolve path
+    $path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea
 
-        # If path exists
-        if ($path)
+    # If path exists
+    if ($path)
+    {
+        # Create new object
+        $xml = New-Object -TypeName System.Xml.XmlDocument
+        # Load XML file
+        $xml.Load($path)
+
+        # If class exists
+        if ($node = $xml.Ontology.Declaration.Class | Where-Object -Property IRI -eq -Value "#$ClassName")
         {
-            # Create new object
-            $xml = New-Object -TypeName System.Xml.XmlDocument
-            # Load XML file
-            $xml.Load($path)
+            # Rename class
+            $node.SetAttribute("IRI", "#$NewClassName")
 
-            # If class exists
-            if ($node = $xml.Ontology.Declaration.Class | Where-Object -Property IRI -eq -Value "#$ClassName")
+            # If the class is a child of another class
+            if ($nodes = $xml.Ontology.SubClassOf |
+                            Where-Object -Property Class |
+                            Where-Object -FilterScript {$PSItem.Class[0].IRI -eq "#$ClassName"} |
+                            ForEach-Object -Process {$PSItem.Class[0]})
             {
-                # Rename class
-                $node.SetAttribute("IRI", "#$NewClassName")
-
-                # If the class is a child of another class
-                if ($nodes = $xml.Ontology.SubClassOf |
-                             Where-Object -Property Class |
-                             Where-Object -FilterScript {$PSItem.Class[0].IRI -eq "#$ClassName"} |
-                             ForEach-Object -Process {$PSItem.Class[0]})
+                foreach ($node in $nodes)
                 {
-                    foreach ($node in $nodes)
-                    {
-                        # Rename class in SubClassOf node
-                        $node.SetAttribute("IRI", "#$NewClassName")
-                    }
+                    # Rename class in SubClassOf node
+                    $node.SetAttribute("IRI", "#$NewClassName")
                 }
-
-                # If the class is a parent to another class
-                if ($nodes = $xml.Ontology.SubClassOf |
-                             Where-Object -Property Class |
-                             Where-Object -FilterScript {$PSItem.Class[1].IRI -eq "#$ClassName"} |
-                             ForEach-Object -Process {$PSItem.Class[1]})
-                {
-                    foreach ($node in $nodes)
-                    {
-                        # Rename class in SubClassOf node
-                        $node.SetAttribute("IRI", "#$NewClassName")
-                    }
-                }
-
-                # If there are objects of the class
-                if ($nodes = $xml.Ontology.ClassAssertion |
-                             Where-Object -Property Class |
-                             Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"} |
-                             ForEach-Object -Process {$PSItem.Class})
-                {
-                    foreach ($node in $nodes)
-                    {
-                        # Rename class in ClassAssertion node
-                        $node.SetAttribute("IRI", "#$NewClassName")
-                    }
-                }
-
-                # If there are data properties with domain of the class
-                if ($nodes = $xml.Ontology.DataPropertyDomain |
-                             Where-Object -Property Class |
-                             Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"} |
-                             ForEach-Object -Process {$PSItem.Class})
-                {
-                    foreach ($node in $nodes)
-                    {
-                        # Rename class in DataPropertyDomain node
-                        $node.SetAttribute("IRI", "#$NewClassName")
-                    }
-                }
-                # Save file
-                $xml.Save($path)
             }
-            else
+
+            # If the class is a parent to another class
+            if ($nodes = $xml.Ontology.SubClassOf |
+                            Where-Object -Property Class |
+                            Where-Object -FilterScript {$PSItem.Class[1].IRI -eq "#$ClassName"} |
+                            ForEach-Object -Process {$PSItem.Class[1]})
             {
-                # Class is not found
-                Write-Output -InputObject "There are no such a class"
+                foreach ($node in $nodes)
+                {
+                    # Rename class in SubClassOf node
+                    $node.SetAttribute("IRI", "#$NewClassName")
+                }
             }
+
+            # If there are objects of the class
+            if ($nodes = $xml.Ontology.ClassAssertion |
+                            Where-Object -Property Class |
+                            Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"} |
+                            ForEach-Object -Process {$PSItem.Class})
+            {
+                foreach ($node in $nodes)
+                {
+                    # Rename class in ClassAssertion node
+                    $node.SetAttribute("IRI", "#$NewClassName")
+                }
+            }
+
+            # If there are data properties with domain of the class
+            if ($nodes = $xml.Ontology.DataPropertyDomain |
+                            Where-Object -Property Class |
+                            Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"} |
+                            ForEach-Object -Process {$PSItem.Class})
+            {
+                foreach ($node in $nodes)
+                {
+                    # Rename class in DataPropertyDomain node
+                    $node.SetAttribute("IRI", "#$NewClassName")
+                }
+            }
+            # Save file
+            $xml.Save($path)
         }
         else
         {
-            # Resolve path error
-            Write-Output -InputObject $ea.Exception.Message
+            # Class is not found
+            Write-Output -InputObject "There are no such a class"
         }
+    }
+    else
+    {
+        # Resolve path error
+        Write-Output -InputObject $ea.Exception.Message
+    }
 }
