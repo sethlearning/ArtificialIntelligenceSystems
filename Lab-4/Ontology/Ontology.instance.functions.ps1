@@ -16,9 +16,9 @@ function Get-OwlInstance
         # Define array of result objects
         $instancelist = @()
 
-        foreach ($instance in $xml.Ontology.Declaration.NamedIndividual.IRI.Trim('#'))
+        foreach ($instance in $xml.Ontology.Declaration.NamedIndividual.IRI)
         {
-            $instancelist += [pscustomobject]@{InstanceName = $instance}
+            $instancelist += [pscustomobject]@{InstanceName = $instance.Trim('#')}
         }
 
         # If there are class hierarchy
@@ -27,7 +27,22 @@ function Get-OwlInstance
             # For each object in the result array
             foreach ($instance in $instancelist)
             {
-                
+                # Create empty classnames array
+                $classnames = @()
+                # Find corresponding ClassAssertion nodes
+                if ($nodes = $xml.Ontology.ClassAssertion |
+                             Where-Object -Property NamedIndividual |
+                             Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$($instance.InstanceName)"})
+                {
+                    # For each corresponding ClassAssertion node
+                    foreach ($node in $nodes)
+                    {
+                        # Add classname to array
+                        $classnames += $node.Class.IRI.Trim('#')
+                    }
+                }
+                # Add classnames array as Class property to object (empty array if the instance is not assigned to any class)
+                $instance | Add-Member -MemberType NoteProperty -Name Class -Value $classnames
             }
         }
         $instancelist
