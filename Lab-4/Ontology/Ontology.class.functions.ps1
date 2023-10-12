@@ -201,7 +201,7 @@ function Remove-OwlClass
             else
             {
                 # Class is not found
-                Write-Output -InputObject "There are no such a class"
+                Write-Output -InputObject "Class is not exist: $ClassName"
             }
         }
         else
@@ -311,7 +311,7 @@ function Rename-OwlClass
             else
             {
                 # Class is not found
-                Write-Output -InputObject "There are no such a class"
+                Write-Output -InputObject "Class is not exist: $ClassName"
             }
         }
         else
