@@ -213,7 +213,7 @@ function Remove-OwlInstance
             else
             {
                 # Instance is not found
-                Write-Output -InputObject "There are no such an instance"
+                Write-Output -InputObject "Instance is not exist: $InstanceName"
             }
         }
         else
@@ -298,7 +298,7 @@ function Rename-OwlInstance
             else
             {
                 # Instance is not found
-                Write-Output -InputObject "There are no such an instance"
+                Write-Output -InputObject "Instance is not exist: $InstanceName"
             }
         }
         else
