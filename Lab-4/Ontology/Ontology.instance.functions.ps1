@@ -202,3 +202,78 @@ function Remove-OwlInstance
     }
 }
 
+function Rename-OwlInstance
+{
+    Param (
+        [string]$FileName,
+        [string]$InstanceName,
+        [string]$NewInstanceName
+    )
+
+    # Resolve path
+    $path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea
+
+    # If path exists
+    if ($path)
+    {
+        # Create new object
+        $xml = New-Object -TypeName System.Xml.XmlDocument
+        # Load XML file
+        $xml.Load($path)
+
+        # If instance exists
+        if ($node = $xml.Ontology.Declaration.NamedIndividual | Where-Object -Property IRI -eq -Value "#$InstanceName")
+        {
+            # If NewInstanceName is specified
+            if ($NewInstanceName)
+            {
+                # Rename instance
+                $node.SetAttribute("IRI", "#$NewInstanceName")
+                
+                # If the instance is associated with classes
+                if ($nodes = $xml.Ontology.ClassAssertion |
+                            Where-Object -Property NamedIndividual |
+                            Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
+                            ForEach-Object -MemberName NamedIndividual)
+                {
+                    foreach($node in $nodes)
+                    {
+                        # Rename instance in ClassAssertion node
+                        $node.SetAttribute("IRI", "#$NewInstanceName")
+                    }
+                }
+
+                # If there are properties associated with the instance
+                if ($nodes = $xml.Ontology.DataPropertyAssertion |
+                            Where-Object -Property NamedIndividual |
+                            Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
+                            ForEach-Object -MemberName NamedIndividual)
+                {
+                    foreach ($node in $nodes)
+                    {
+                        # Rename instance in DataPropertyAssertion node
+                        $node.SetAttribute("IRI", "#$NewInstanceName")
+                    }
+                }
+
+                # Save file
+                $xml.Save($path)
+            }
+            else
+            {
+                # NewInstanceName is not specified
+                Write-Output -InputObject "New instance name is not specified"
+            }
+        }
+        else
+        {
+            # Instance is not found
+            Write-Output -InputObject "There are no such an instance"
+        }
+    }
+    else
+    {
+        # Resolve path error
+        Write-Output -InputObject $ea.Exception.Message
+    }
+}

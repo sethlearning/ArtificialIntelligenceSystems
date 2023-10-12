@@ -213,62 +213,71 @@ function Rename-OwlClass
         # If class exists
         if ($node = $xml.Ontology.Declaration.Class | Where-Object -Property IRI -eq -Value "#$ClassName")
         {
-            # Rename class
-            $node.SetAttribute("IRI", "#$NewClassName")
-
-            # If the class is a child of another class
-            if ($nodes = $xml.Ontology.SubClassOf |
-                            Where-Object -Property Class |
-                            Where-Object -FilterScript {$PSItem.Class[0].IRI -eq "#$ClassName"} |
-                            ForEach-Object -Process {$PSItem.Class[0]})
+            # If NewClassName is specified
+            if ($NewClassName)
             {
-                foreach ($node in $nodes)
-                {
-                    # Rename class in SubClassOf node
-                    $node.SetAttribute("IRI", "#$NewClassName")
-                }
-            }
+                # Rename class
+                $node.SetAttribute("IRI", "#$NewClassName")
 
-            # If the class is a parent to another class
-            if ($nodes = $xml.Ontology.SubClassOf |
-                            Where-Object -Property Class |
-                            Where-Object -FilterScript {$PSItem.Class[1].IRI -eq "#$ClassName"} |
-                            ForEach-Object -Process {$PSItem.Class[1]})
-            {
-                foreach ($node in $nodes)
+                # If the class is a child of another class
+                if ($nodes = $xml.Ontology.SubClassOf |
+                                Where-Object -Property Class |
+                                Where-Object -FilterScript {$PSItem.Class[0].IRI -eq "#$ClassName"} |
+                                ForEach-Object -Process {$PSItem.Class[0]})
                 {
-                    # Rename class in SubClassOf node
-                    $node.SetAttribute("IRI", "#$NewClassName")
+                    foreach ($node in $nodes)
+                    {
+                        # Rename class in SubClassOf node
+                        $node.SetAttribute("IRI", "#$NewClassName")
+                    }
                 }
-            }
 
-            # If there are objects of the class
-            if ($nodes = $xml.Ontology.ClassAssertion |
-                            Where-Object -Property Class |
-                            Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"} |
-                            ForEach-Object -Process {$PSItem.Class})
-            {
-                foreach ($node in $nodes)
+                # If the class is a parent to another class
+                if ($nodes = $xml.Ontology.SubClassOf |
+                                Where-Object -Property Class |
+                                Where-Object -FilterScript {$PSItem.Class[1].IRI -eq "#$ClassName"} |
+                                ForEach-Object -Process {$PSItem.Class[1]})
                 {
-                    # Rename class in ClassAssertion node
-                    $node.SetAttribute("IRI", "#$NewClassName")
+                    foreach ($node in $nodes)
+                    {
+                        # Rename class in SubClassOf node
+                        $node.SetAttribute("IRI", "#$NewClassName")
+                    }
                 }
-            }
 
-            # If there are data properties with domain of the class
-            if ($nodes = $xml.Ontology.DataPropertyDomain |
-                            Where-Object -Property Class |
-                            Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"} |
-                            ForEach-Object -Process {$PSItem.Class})
-            {
-                foreach ($node in $nodes)
+                # If there are objects of the class
+                if ($nodes = $xml.Ontology.ClassAssertion |
+                                Where-Object -Property Class |
+                                Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"} |
+                                ForEach-Object -Process {$PSItem.Class})
                 {
-                    # Rename class in DataPropertyDomain node
-                    $node.SetAttribute("IRI", "#$NewClassName")
+                    foreach ($node in $nodes)
+                    {
+                        # Rename class in ClassAssertion node
+                        $node.SetAttribute("IRI", "#$NewClassName")
+                    }
                 }
+
+                # If there are data properties with domain of the class
+                if ($nodes = $xml.Ontology.DataPropertyDomain |
+                                Where-Object -Property Class |
+                                Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"} |
+                                ForEach-Object -Process {$PSItem.Class})
+                {
+                    foreach ($node in $nodes)
+                    {
+                        # Rename class in DataPropertyDomain node
+                        $node.SetAttribute("IRI", "#$NewClassName")
+                    }
+                }
+                # Save file
+                $xml.Save($path)
             }
-            # Save file
-            $xml.Save($path)
+            else
+            {
+                # NewClassName is not specified
+                Write-Output -InputObject "New class name is not specified"
+            }
         }
         else
         {
