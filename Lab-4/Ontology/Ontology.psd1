@@ -66,10 +66,10 @@ PowerShellVersion = '5.1'
 # FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = @('Ontology.class.functions.ps1', 'Ontology.instance.functions.ps1')
+NestedModules = @('Ontology.class.functions.ps1', 'Ontology.instance.functions.ps1', 'Ontology.instanceassociation.functions.ps1')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @('Get-OwlClass', 'New-OwlClass', 'Rename-OwlClass', 'Remove-OwlClass', 'Get-OwlInstance', 'New-OwlInstance', 'Rename-OwlInstance', 'Remove-OwlInstance')
+FunctionsToExport = @('Get-OwlClass', 'New-OwlClass', 'Rename-OwlClass', 'Remove-OwlClass', 'Get-OwlInstance', 'New-OwlInstance', 'Rename-OwlInstance', 'Remove-OwlInstance', 'Add-OwlInstanceAssociation')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
@@ -87,7 +87,7 @@ AliasesToExport = @()
 # ModuleList = @()
 
 # List of all files packaged with this module
-FileList = @('Ontology.psd1', 'Ontology.psm1', 'Ontology.class.functions.ps1', 'Ontology.instance.functions.ps1')
+FileList = @('Ontology.psd1', 'Ontology.psm1', 'Ontology.class.functions.ps1', 'Ontology.instance.functions.ps1', 'Ontology.instanceassociation.functions.ps1')
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{
