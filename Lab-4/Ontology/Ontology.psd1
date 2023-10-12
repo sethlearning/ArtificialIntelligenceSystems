@@ -69,7 +69,7 @@ PowerShellVersion = '5.1'
 NestedModules = @('Ontology.class.functions.ps1', 'Ontology.instance.functions.ps1', 'Ontology.instanceassociation.functions.ps1')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @('Get-OwlClass', 'New-OwlClass', 'Rename-OwlClass', 'Remove-OwlClass', 'Get-OwlInstance', 'New-OwlInstance', 'Rename-OwlInstance', 'Remove-OwlInstance', 'Add-OwlInstanceAssociation', 'Remove-OwlInstanceAssociation')
+FunctionsToExport = @('Get-OwlClass', 'New-OwlClass', 'Rename-OwlClass', 'Remove-OwlClass', 'Get-OwlInstance', 'New-OwlInstance', 'Rename-OwlInstance', 'Remove-OwlInstance', 'Add-OwlInstanceAssociation', 'Remove-OwlInstanceAssociation', 'Set-OwlInstanceAssociation')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
