@@ -53,3 +53,91 @@ function Get-OwlInstance
         Write-Output -InputObject $ea.Exception.Message
     }
 }
+
+function New-OwlInstance
+{
+    Param (
+        [string]$FileName,
+        [string]$InstanceName,
+        [string[]]$ClassName
+        )
+
+        # Resolve path
+        $path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea
+
+        # If path exists
+        if ($path)
+        {
+            # Create new object
+            $xml = New-Object -TypeName System.Xml.XmlDocument
+            # Load XML file
+            $xml.Load($path)
+
+            # If instance exists
+            if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
+            {
+                Write-Output -InputObject "The instance is already exists"
+            }
+            else
+            {
+                # If ClassName is specified and there are no such a class
+                if ($ClassName)
+                {
+                    foreach ($class in $ClassName)
+                    {
+                        if ("#$class" -notin $xml.Ontology.Declaration.Class.IRI)
+                        {
+                            Write-Output -InputObject "There are no such a class: $class"
+                            return
+                        }
+                    }
+                }
+
+                # Create Declaration node with default namespace URI
+                $declaration = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Declaration", $xml.DocumentElement.NamespaceURI)
+
+                # Create NamedIndividual node with default namespace URI
+                $namedindividual = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "NamedIndividual", $xml.DocumentElement.NamespaceURI)
+
+                # Set NamedIndividual node attribute
+                $namedindividual.SetAttribute("IRI", "#$InstanceName")
+
+                # Append NamedIndividual node as a child to Declaration node
+                $declaration.AppendChild($namedindividual) | Out-Null
+
+                # Append Declaration node as a child to Ontology node
+                $xml.Ontology.AppendChild($declaration) | Out-Null
+
+                if ($ClassName)
+                {
+                    foreach ($class in $ClassName)
+                    {
+                        # Create ClassAssertion node
+                        $classassertion = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "ClassAssertion", $xml.DocumentElement.NamespaceURI)
+                        # Create Class node
+                        $classnode = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
+                        # Set Class node attribute
+                        $classnode.SetAttribute("IRI", "#$class")
+                        # Create NamedIndividual node
+                        $namedindividualnode = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "NamedIndividual", $xml.DocumentElement.NamespaceURI)
+                        # Set NamedIndividual node attribute
+                        $namedindividualnode.SetAttribute("IRI", "#$InstanceName")
+                        # Append Class node as a child to ClassAssertion node
+                        $classassertion.AppendChild($classnode) | Out-Null
+                        # Append NamedIndividual node as a child to ClassAssertion node
+                        $classassertion.AppendChild($namedindividualnode) | Out-Null
+                        # Append ClassAssertion node as a child to Ontology node
+                        $xml.Ontology.AppendChild($classassertion) | Out-Null
+                    }
+                }
+
+                # Save file
+                $xml.Save($path)
+            }
+        }
+        else
+        {
+            # Resolve path error
+            Write-Output -InputObject $ea.Exception.Message
+        }
+}

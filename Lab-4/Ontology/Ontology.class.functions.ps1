@@ -93,10 +93,10 @@ function New-OwlClass
             # Set Class node attribute
             $class.SetAttribute("IRI", "#" + $ClassName)
 
-            # Append Class node as child to Declaration node
+            # Append Class node as a child to Declaration node
             $declaration.AppendChild($class) | Out-Null
 
-            # Append Declaration node as child to Ontology node
+            # Append Declaration node as a child to Ontology node
             $xml.Ontology.AppendChild($declaration) | Out-Null
 
             if ($ParentClassName)
@@ -111,11 +111,11 @@ function New-OwlClass
                 $parentclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
                 # Set parent Class node attribute
                 $parentclass.SetAttribute("IRI", "#" + $ParentClassName)
-                # Append child Class node as child to SubClassOf node
+                # Append child Class node as a child to SubClassOf node
                 $subclassof.AppendChild($childclass) | Out-Null
-                # Append parent Class node as child to SubClassOf node
+                # Append parent Class node as a child to SubClassOf node
                 $subclassof.AppendChild($parentclass) | Out-Null
-                # Append SubClassOf node as child to Ontology node
+                # Append SubClassOf node as a child to Ontology node
                 $xml.Ontology.AppendChild($subclassof) | Out-Null
             }
 
