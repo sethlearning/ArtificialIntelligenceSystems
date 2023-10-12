@@ -49,18 +49,18 @@ function Add-OwlInstanceAssociation
                             # Append ClassAssertion node as a child to Ontology node
                             $xml.Ontology.AppendChild($classassertion) | Out-Null
 
-                            Write-Output -InputObject "Instance `"$InstanceName`" is now associated with the class `"$class`""
+                            Write-Output -InputObject "Added association with class: $class"
                         }
                         else
                         {
                             # Instance is already associated with the class
-                            Write-Output -InputObject "Instance `"$InstanceName`" is already associated with the class `"$class`""
+                            Write-Output -InputObject "Already associated with class: $class"
                         }
                     }
                     else
                     {
                         # Class is not exist
-                        Write-Output -InputObject "Class `"$class`" is not exist"
+                        Write-Output -InputObject "Class is not exist: $class"
                     }
                 }
                 # Save file
@@ -69,7 +69,7 @@ function Add-OwlInstanceAssociation
             else
             {
                 # Instance is not found
-                Write-Output -InputObject "There are no such an instance"
+                Write-Output -InputObject "Instance is not exist: $InstanceName"
             }
         }
         else
@@ -129,18 +129,18 @@ function Remove-OwlInstanceAssociation
                             {
                                 # Remove ClassAssociation from Ontology node
                                 $xml.Ontology.RemoveChild($node) | Out-Null
-                                Write-Output -InputObject "Instance `"$InstanceName`" is now dissociated from the class `"$class`""
+                                Write-Output -InputObject "Removed association with class: $class"
                             }
                             else
                             {
                                 # Instance is not associated with the class
-                                Write-Output -InputObject "Instance `"$InstanceName`" is not associated with the class `"$class`""
+                                Write-Output -InputObject "Not associated with class: $class"
                             }
                         }
                         else
                         {
                             # Class is not exist
-                            Write-Output -InputObject "Class `"$class`" is not exist"
+                            Write-Output -InputObject "Class is not exist: $class"
                         }
                     }
                 }
@@ -156,7 +156,7 @@ function Remove-OwlInstanceAssociation
                         {
                             # Remove ClassAssociation from Ontology node
                             $xml.Ontology.RemoveChild($node) | Out-Null
-                            Write-Output -InputObject "Instance `"$InstanceName`" is now dissociated from the class `"$($node.Class.IRI.Trim('#'))`""
+                            Write-Output -InputObject "Removed association with class: $($node.Class.IRI.Trim('#'))"
                         }
                     }
                 }
@@ -166,7 +166,7 @@ function Remove-OwlInstanceAssociation
             else
             {
                 # Instance is not found
-                Write-Output -InputObject "There are no such an instance"
+                Write-Output -InputObject "Instance is not exist: $InstanceName"
             }
         }
         else
@@ -270,7 +270,7 @@ function Set-OwlInstanceAssociation
             else
             {
                 # Instance is not found
-                Write-Output -InputObject "There are no such an instance"
+                Write-Output -InputObject "Instance is not exist: $InstanceName"
             }
         }
         else
