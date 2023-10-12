@@ -21,19 +21,19 @@ function Add-OwlInstanceAssociation
                 $xml.Load($path)
 
                 # If instance exists
-                if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
+                if ("#$InstanceName" -cin $xml.Ontology.Declaration.NamedIndividual.IRI)
                 {
                     # For each class name
                     foreach ($class in $ClassName)
                     {
                         # If class is exists
-                        if ("#$class" -in $xml.Ontology.Declaration.Class.IRI)
+                        if ("#$class" -cin $xml.Ontology.Declaration.Class.IRI)
                         {
                             # If the instance is not associated with the class
                             if (-not ($xml.Ontology.ClassAssertion |
                                 Where-Object -Property NamedIndividual |
-                                Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
-                                Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$class"}))
+                                Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$InstanceName"} |
+                                Where-Object -FilterScript {$PSItem.Class.IRI -ceq "#$class"}))
                             {
                                 # Create ClassAssertion node
                                 $classassertion = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "ClassAssertion", $xml.DocumentElement.NamespaceURI)
@@ -123,7 +123,7 @@ function Remove-OwlInstanceAssociation
                 $xml.Load($path)
 
                 # If instance exists
-                if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
+                if ("#$InstanceName" -cin $xml.Ontology.Declaration.NamedIndividual.IRI)
                 {
                     if ($PSCmdlet.ParameterSetName -eq 'ClassName')
                     {
@@ -131,13 +131,13 @@ function Remove-OwlInstanceAssociation
                         foreach ($class in $ClassName)
                         {
                             # If class is exists
-                            if ("#$class" -in $xml.Ontology.Declaration.Class.IRI)
+                            if ("#$class" -cin $xml.Ontology.Declaration.Class.IRI)
                             {
                                 # If the instance is associated with the class
                                 if ($node = $xml.Ontology.ClassAssertion |
                                     Where-Object -Property NamedIndividual |
-                                    Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
-                                    Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$class"})
+                                    Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$InstanceName"} |
+                                    Where-Object -FilterScript {$PSItem.Class.IRI -ceq "#$class"})
                                 {
                                     # Remove ClassAssociation from Ontology node
                                     $xml.Ontology.RemoveChild($node) | Out-Null
@@ -161,7 +161,7 @@ function Remove-OwlInstanceAssociation
                         # If the instance is associated with any classes
                         if ($nodes = $xml.Ontology.ClassAssertion |
                                     Where-Object -Property NamedIndividual |
-                                    Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"})
+                                    Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$InstanceName"})
                         {
                             # For each such class
                             foreach ($node in $nodes)
@@ -223,13 +223,13 @@ function Set-OwlInstanceAssociation
                 $xml.Load($path)
 
                 # If instance exists
-                if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
+                if ("#$InstanceName" -cin $xml.Ontology.Declaration.NamedIndividual.IRI)
                 {
                     # If the instance is associated with classes other than the specified
                     if ($nodes = $xml.Ontology.ClassAssertion |
                                 Where-Object -Property NamedIndividual |
-                                Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
-                                Where-Object -FilterScript {$PSItem.Class.IRI -notin
+                                Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$InstanceName"} |
+                                Where-Object -FilterScript {$PSItem.Class.IRI -cnotin
                                     ($ClassName | Where-Object -FilterScript {$PSItem} |
                                     ForEach-Object -Process {$PSItem.Insert(0,'#')})})
                     {
@@ -240,19 +240,18 @@ function Set-OwlInstanceAssociation
                             $xml.Ontology.RemoveChild($node) | Out-Null
                             Write-Output -InputObject "Removed association with class: $($node.Class.IRI.Trim('#'))"
                         }
-
                     }
 
                     foreach ($class in $ClassName)
                     {
                         # If class is exists
-                        if ("#$class" -in $xml.Ontology.Declaration.Class.IRI)
+                        if ("#$class" -cin $xml.Ontology.Declaration.Class.IRI)
                         {
                             # If the instance is not associated with the class
                             if (-not ($xml.Ontology.ClassAssertion |
                                 Where-Object -Property NamedIndividual |
-                                Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
-                                Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$class"}))
+                                Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$InstanceName"} |
+                                Where-Object -FilterScript {$PSItem.Class.IRI -ceq "#$class"}))
                             {
                                 # Create ClassAssertion node
                                 $classassertion = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "ClassAssertion", $xml.DocumentElement.NamespaceURI)

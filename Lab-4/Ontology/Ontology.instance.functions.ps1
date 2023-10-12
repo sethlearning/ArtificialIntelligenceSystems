@@ -32,7 +32,7 @@ function Get-OwlInstance
                     # Find corresponding ClassAssertion nodes
                     if ($nodes = $xml.Ontology.ClassAssertion |
                                 Where-Object -Property NamedIndividual |
-                                Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$($instance.InstanceName)"})
+                                Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$($instance.InstanceName)"})
                     {
                         # For each corresponding ClassAssertion node
                         foreach ($node in $nodes)
@@ -83,7 +83,7 @@ function New-OwlInstance
                 $xml.Load($path)
 
                 # If instance exists
-                if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
+                if ("#$InstanceName" -cin $xml.Ontology.Declaration.NamedIndividual.IRI)
                 {
                     Write-Output -InputObject "The instance is already exists"
                 }
@@ -94,7 +94,7 @@ function New-OwlInstance
                     {
                         foreach ($class in $ClassName)
                         {
-                            if ("#$class" -notin $xml.Ontology.Declaration.Class.IRI)
+                            if ("#$class" -cnotin $xml.Ontology.Declaration.Class.IRI)
                             {
                                 Write-Output -InputObject "There are no such a class: $class"
                                 return
@@ -185,17 +185,17 @@ function Remove-OwlInstance
                 $xml.Load($path)
 
                 # If instance exists
-                if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
+                if ("#$InstanceName" -cin $xml.Ontology.Declaration.NamedIndividual.IRI)
                 {
                     # If there are properties associated with the instance
-                    if ("#$InstanceName" -in $xml.Ontology.DataPropertyAssertion.NamedIndividual.IRI)
+                    if ("#$InstanceName" -cin $xml.Ontology.DataPropertyAssertion.NamedIndividual.IRI)
                     {
                         Write-Output -InputObject "There are properties associated with the instance"
                     }
                     else
                     {
                         # If the instance is associated with classes
-                        if ($nodes = $xml.Ontology.ClassAssertion | Where-Object -Property NamedIndividual | Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"})
+                        if ($nodes = $xml.Ontology.ClassAssertion | Where-Object -Property NamedIndividual | Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$InstanceName"})
                         {
                             # For each association
                             foreach ($node in $nodes)
@@ -206,7 +206,7 @@ function Remove-OwlInstance
                         }
 
                         # Get instance declaration node
-                        $node = $xml.Ontology.Declaration | Where-Object -Property NamedIndividual | Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"}
+                        $node = $xml.Ontology.Declaration | Where-Object -Property NamedIndividual | Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$InstanceName"}
                         # Remove instance declaration node from children of Ontology node
                         $xml.Ontology.RemoveChild($node) | Out-Null
                         # Save file
@@ -261,7 +261,7 @@ function Rename-OwlInstance
                 $xml.Load($path)
 
                 # If instance exists
-                if ($node = $xml.Ontology.Declaration.NamedIndividual | Where-Object -Property IRI -eq -Value "#$InstanceName")
+                if ($node = $xml.Ontology.Declaration.NamedIndividual | Where-Object -Property IRI -ceq -Value "#$InstanceName")
                 {
                     # If NewInstanceName is specified
                     if ($NewInstanceName)
@@ -272,7 +272,7 @@ function Rename-OwlInstance
                         # If the instance is associated with classes
                         if ($nodes = $xml.Ontology.ClassAssertion |
                                     Where-Object -Property NamedIndividual |
-                                    Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
+                                    Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$InstanceName"} |
                                     ForEach-Object -MemberName NamedIndividual)
                         {
                             foreach($node in $nodes)
@@ -285,7 +285,7 @@ function Rename-OwlInstance
                         # If there are properties associated with the instance
                         if ($nodes = $xml.Ontology.DataPropertyAssertion |
                                     Where-Object -Property NamedIndividual |
-                                    Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
+                                    Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$InstanceName"} |
                                     ForEach-Object -MemberName NamedIndividual)
                         {
                             foreach ($node in $nodes)

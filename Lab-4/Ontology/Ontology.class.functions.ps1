@@ -29,7 +29,7 @@ function Get-OwlClass
                 foreach ($class in $classlist)
                 {
                     # Find corresponding SubClassOf node
-                    if ($node = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI -eq "#$($class.ClassName)"})
+                    if ($node = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI -ceq "#$($class.ClassName)"})
                     {
                         # Add Parent property with parent class name
                         $class | Add-Member -MemberType NoteProperty -Name Parent -Value $node.Class[1].IRI.Trim('#')
@@ -80,14 +80,14 @@ function New-OwlClass
                 $xml.Load($path)
 
                 # If class exists
-                if ("#$ClassName" -in $xml.Ontology.Declaration.Class.IRI)
+                if ("#$ClassName" -cin $xml.Ontology.Declaration.Class.IRI)
                 {
                     Write-Output -InputObject "The class is already exist"
                 }
                 else
                 {
                     # If Parent class name is specified and there are no such a class
-                    if ($ParentClassName -and "#$ParentClassName" -notin $xml.Ontology.Declaration.Class.IRI)
+                    if ($ParentClassName -and "#$ParentClassName" -cnotin $xml.Ontology.Declaration.Class.IRI)
                     {
                         Write-Output -InputObject "There are no such a parent class"
                         return
@@ -173,28 +173,28 @@ function Remove-OwlClass
                 $xml.Load($path)
 
                 # If class exists
-                if ("#$ClassName" -in $xml.Ontology.Declaration.Class.IRI)
+                if ("#$ClassName" -cin $xml.Ontology.Declaration.Class.IRI)
                 {
                         # If there are objects of the class
-                    if ("#$ClassName" -in $xml.Ontology.ClassAssertion.Class.IRI -or
+                    if ("#$ClassName" -cin $xml.Ontology.ClassAssertion.Class.IRI -or
                         # If there are data properties with domain of the class
-                        "#$ClassName" -in $xml.Ontology.DataPropertyDomain.Class.IRI -or
+                        "#$ClassName" -cin $xml.Ontology.DataPropertyDomain.Class.IRI -or
                         # If the class is parent to another class
-                        ($xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[1].IRI -eq "#$ClassName"}) )
+                        ($xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[1].IRI -ceq "#$ClassName"}) )
                     {
                         Write-Output -InputObject "Class is associated with another ontology elements"
                     }
                     else
                     {
                         # If the class is a child of another class
-                        if ($node = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI -eq "#$ClassName"})
+                        if ($node = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI -ceq "#$ClassName"})
                         {
                             # Remove class parent-child relationship node from Ontology node
                             $xml.Ontology.RemoveChild($node) | Out-Null
                         }
 
                         # Get class declaration node
-                        $node = $xml.Ontology.Declaration | Where-Object -Property "Class" | Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"}
+                        $node = $xml.Ontology.Declaration | Where-Object -Property "Class" | Where-Object -FilterScript {$PSItem.Class.IRI -ceq "#$ClassName"}
                         # Remove class declaration node from children of Ontology node
                         $xml.Ontology.RemoveChild($node) | Out-Null
                         # Save file
@@ -249,7 +249,7 @@ function Rename-OwlClass
                 $xml.Load($path)
 
                 # If class exists
-                if ($node = $xml.Ontology.Declaration.Class | Where-Object -Property IRI -eq -Value "#$ClassName")
+                if ($node = $xml.Ontology.Declaration.Class | Where-Object -Property IRI -ceq -Value "#$ClassName")
                 {
                     # If NewClassName is specified
                     if ($NewClassName)
@@ -260,7 +260,7 @@ function Rename-OwlClass
                         # If the class is a child of another class
                         if ($nodes = $xml.Ontology.SubClassOf |
                                         Where-Object -Property Class |
-                                        Where-Object -FilterScript {$PSItem.Class[0].IRI -eq "#$ClassName"} |
+                                        Where-Object -FilterScript {$PSItem.Class[0].IRI -ceq "#$ClassName"} |
                                         ForEach-Object -Process {$PSItem.Class[0]})
                         {
                             foreach ($node in $nodes)
@@ -273,7 +273,7 @@ function Rename-OwlClass
                         # If the class is a parent to another class
                         if ($nodes = $xml.Ontology.SubClassOf |
                                         Where-Object -Property Class |
-                                        Where-Object -FilterScript {$PSItem.Class[1].IRI -eq "#$ClassName"} |
+                                        Where-Object -FilterScript {$PSItem.Class[1].IRI -ceq "#$ClassName"} |
                                         ForEach-Object -Process {$PSItem.Class[1]})
                         {
                             foreach ($node in $nodes)
@@ -286,7 +286,7 @@ function Rename-OwlClass
                         # If there are objects of the class
                         if ($nodes = $xml.Ontology.ClassAssertion |
                                         Where-Object -Property Class |
-                                        Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"} |
+                                        Where-Object -FilterScript {$PSItem.Class.IRI -ceq "#$ClassName"} |
                                         ForEach-Object -Process {$PSItem.Class})
                         {
                             foreach ($node in $nodes)
@@ -299,7 +299,7 @@ function Rename-OwlClass
                         # If there are data properties with domain of the class
                         if ($nodes = $xml.Ontology.DataPropertyDomain |
                                         Where-Object -Property Class |
-                                        Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$ClassName"} |
+                                        Where-Object -FilterScript {$PSItem.Class.IRI -ceq "#$ClassName"} |
                                         ForEach-Object -Process {$PSItem.Class})
                         {
                             foreach ($node in $nodes)
