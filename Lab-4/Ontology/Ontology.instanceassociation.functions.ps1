@@ -87,10 +87,16 @@ function Add-OwlInstanceAssociation
 
 function Remove-OwlInstanceAssociation
 {
+    [CmdletBinding(DefaultParameterSetName='ClassName',PositionalBinding=$true)]
     Param (
+        [Parameter(Position=0)]
         [string]$FileName,
+        [Parameter(Position=1)]
         [string]$InstanceName,
-        [string[]]$ClassName
+        [Parameter(ParameterSetName='ClassName',Position=2)]
+        [string[]]$ClassName,
+        [Parameter(ParameterSetName='All')]
+        [switch]$All
     )
 
     # If FileName is specified
@@ -107,32 +113,51 @@ function Remove-OwlInstanceAssociation
             # If instance exists
             if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
             {
-                # For each class name
-                foreach ($class in $ClassName)
+                if ($PSCmdlet.ParameterSetName -eq 'ClassName')
                 {
-                    # If class is exists
-                    if ("#$class" -in $xml.Ontology.Declaration.Class.IRI)
+                    # For each class name
+                    foreach ($class in $ClassName)
                     {
-                        # If the instance is associated with the class
-                        if ($node = $xml.Ontology.ClassAssertion |
-                            Where-Object -Property NamedIndividual |
-                            Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
-                            Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$class"})
+                        # If class is exists
+                        if ("#$class" -in $xml.Ontology.Declaration.Class.IRI)
                         {
-                            # Remove ClassAssociation from Ontology node
-                            $xml.Ontology.RemoveChild($node) | Out-Null
-                            Write-Output -InputObject "Instance `"$InstanceName`" is now dissociated from the class `"$class`""
+                            # If the instance is associated with the class
+                            if ($node = $xml.Ontology.ClassAssertion |
+                                Where-Object -Property NamedIndividual |
+                                Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
+                                Where-Object -FilterScript {$PSItem.Class.IRI -eq "#$class"})
+                            {
+                                # Remove ClassAssociation from Ontology node
+                                $xml.Ontology.RemoveChild($node) | Out-Null
+                                Write-Output -InputObject "Instance `"$InstanceName`" is now dissociated from the class `"$class`""
+                            }
+                            else
+                            {
+                                # Instance is not associated with the class
+                                Write-Output -InputObject "Instance `"$InstanceName`" is not associated with the class `"$class`""
+                            }
                         }
                         else
                         {
-                            # Instance is not associated with the class
-                            Write-Output -InputObject "Instance `"$InstanceName`" is not associated with the class `"$class`""
+                            # Class is not exist
+                            Write-Output -InputObject "Class `"$class`" is not exist"
                         }
                     }
-                    else
+                }
+                if ($PSCmdlet.ParameterSetName -eq 'All')
+                {
+                    # If the instance is associated with any classes
+                    if ($nodes = $xml.Ontology.ClassAssertion |
+                                 Where-Object -Property NamedIndividual |
+                                 Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"})
                     {
-                        # Class is not exist
-                        Write-Output -InputObject "Class `"$class`" is not exist"
+                        # For each such class
+                        foreach ($node in $nodes)
+                        {
+                            # Remove ClassAssociation from Ontology node
+                            $xml.Ontology.RemoveChild($node) | Out-Null
+                            Write-Output -InputObject "Instance `"$InstanceName`" is now dissociated from the class `"$($node.Class.IRI.Trim('#'))`""
+                        }
                     }
                 }
                 # Save file
