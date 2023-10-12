@@ -74,71 +74,80 @@ function New-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
-            # Create new object
-            $xml = New-Object -TypeName System.Xml.XmlDocument
-            # Load XML file
-            $xml.Load($path)
-
-            # If instance exists
-            if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
+            # If InstanceName is specified
+            if ($InstanceName)
             {
-                Write-Output -InputObject "The instance is already exists"
+                # Create new object
+                $xml = New-Object -TypeName System.Xml.XmlDocument
+                # Load XML file
+                $xml.Load($path)
+
+                # If instance exists
+                if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
+                {
+                    Write-Output -InputObject "The instance is already exists"
+                }
+                else
+                {
+                    # If ClassName is specified and there are no such a class
+                    if ($ClassName)
+                    {
+                        foreach ($class in $ClassName)
+                        {
+                            if ("#$class" -notin $xml.Ontology.Declaration.Class.IRI)
+                            {
+                                Write-Output -InputObject "There are no such a class: $class"
+                                return
+                            }
+                        }
+                    }
+
+                    # Create Declaration node with default namespace URI
+                    $declaration = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Declaration", $xml.DocumentElement.NamespaceURI)
+
+                    # Create NamedIndividual node with default namespace URI
+                    $namedindividual = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "NamedIndividual", $xml.DocumentElement.NamespaceURI)
+
+                    # Set NamedIndividual node attribute
+                    $namedindividual.SetAttribute("IRI", "#$InstanceName")
+
+                    # Append NamedIndividual node as a child to Declaration node
+                    $declaration.AppendChild($namedindividual) | Out-Null
+
+                    # Append Declaration node as a child to Ontology node
+                    $xml.Ontology.AppendChild($declaration) | Out-Null
+
+                    if ($ClassName)
+                    {
+                        foreach ($class in $ClassName)
+                        {
+                            # Create ClassAssertion node
+                            $classassertion = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "ClassAssertion", $xml.DocumentElement.NamespaceURI)
+                            # Create Class node
+                            $classnode = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
+                            # Set Class node attribute
+                            $classnode.SetAttribute("IRI", "#$class")
+                            # Create NamedIndividual node
+                            $namedindividualnode = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "NamedIndividual", $xml.DocumentElement.NamespaceURI)
+                            # Set NamedIndividual node attribute
+                            $namedindividualnode.SetAttribute("IRI", "#$InstanceName")
+                            # Append Class node as a child to ClassAssertion node
+                            $classassertion.AppendChild($classnode) | Out-Null
+                            # Append NamedIndividual node as a child to ClassAssertion node
+                            $classassertion.AppendChild($namedindividualnode) | Out-Null
+                            # Append ClassAssertion node as a child to Ontology node
+                            $xml.Ontology.AppendChild($classassertion) | Out-Null
+                        }
+                    }
+
+                    # Save file
+                    $xml.Save($path)
+                }
             }
             else
             {
-                # If ClassName is specified and there are no such a class
-                if ($ClassName)
-                {
-                    foreach ($class in $ClassName)
-                    {
-                        if ("#$class" -notin $xml.Ontology.Declaration.Class.IRI)
-                        {
-                            Write-Output -InputObject "There are no such a class: $class"
-                            return
-                        }
-                    }
-                }
-
-                # Create Declaration node with default namespace URI
-                $declaration = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Declaration", $xml.DocumentElement.NamespaceURI)
-
-                # Create NamedIndividual node with default namespace URI
-                $namedindividual = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "NamedIndividual", $xml.DocumentElement.NamespaceURI)
-
-                # Set NamedIndividual node attribute
-                $namedindividual.SetAttribute("IRI", "#$InstanceName")
-
-                # Append NamedIndividual node as a child to Declaration node
-                $declaration.AppendChild($namedindividual) | Out-Null
-
-                # Append Declaration node as a child to Ontology node
-                $xml.Ontology.AppendChild($declaration) | Out-Null
-
-                if ($ClassName)
-                {
-                    foreach ($class in $ClassName)
-                    {
-                        # Create ClassAssertion node
-                        $classassertion = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "ClassAssertion", $xml.DocumentElement.NamespaceURI)
-                        # Create Class node
-                        $classnode = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
-                        # Set Class node attribute
-                        $classnode.SetAttribute("IRI", "#$class")
-                        # Create NamedIndividual node
-                        $namedindividualnode = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "NamedIndividual", $xml.DocumentElement.NamespaceURI)
-                        # Set NamedIndividual node attribute
-                        $namedindividualnode.SetAttribute("IRI", "#$InstanceName")
-                        # Append Class node as a child to ClassAssertion node
-                        $classassertion.AppendChild($classnode) | Out-Null
-                        # Append NamedIndividual node as a child to ClassAssertion node
-                        $classassertion.AppendChild($namedindividualnode) | Out-Null
-                        # Append ClassAssertion node as a child to Ontology node
-                        $xml.Ontology.AppendChild($classassertion) | Out-Null
-                    }
-                }
-
-                # Save file
-                $xml.Save($path)
+                # InstanceName is not specified
+                Write-Output -InputObject "Instance name is not specified"
             }
         }
         else
@@ -167,44 +176,53 @@ function Remove-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
-            # Create new object
-            $xml = New-Object -TypeName System.Xml.XmlDocument
-            # Load XML file
-            $xml.Load($path)
-
-            # If instance exists
-            if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
+            # If InstanceName is specified
+            if ($InstanceName)
             {
-                # If there are properties associated with the instance
-                if ("#$InstanceName" -in $xml.Ontology.DataPropertyAssertion.NamedIndividual.IRI)
+                # Create new object
+                $xml = New-Object -TypeName System.Xml.XmlDocument
+                # Load XML file
+                $xml.Load($path)
+
+                # If instance exists
+                if ("#$InstanceName" -in $xml.Ontology.Declaration.NamedIndividual.IRI)
                 {
-                    Write-Output -InputObject "There are properties associated with the instance"
+                    # If there are properties associated with the instance
+                    if ("#$InstanceName" -in $xml.Ontology.DataPropertyAssertion.NamedIndividual.IRI)
+                    {
+                        Write-Output -InputObject "There are properties associated with the instance"
+                    }
+                    else
+                    {
+                        # If the instance is associated with classes
+                        if ($nodes = $xml.Ontology.ClassAssertion | Where-Object -Property NamedIndividual | Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"})
+                        {
+                            # For each association
+                            foreach ($node in $nodes)
+                            {
+                                # Remove ClassAssociation from Ontology node
+                                $xml.Ontology.RemoveChild($node) | Out-Null
+                            }
+                        }
+
+                        # Get instance declaration node
+                        $node = $xml.Ontology.Declaration | Where-Object -Property NamedIndividual | Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"}
+                        # Remove instance declaration node from children of Ontology node
+                        $xml.Ontology.RemoveChild($node) | Out-Null
+                        # Save file
+                        $xml.Save($path)
+                    }
                 }
                 else
                 {
-                    # If the instance is associated with classes
-                    if ($nodes = $xml.Ontology.ClassAssertion | Where-Object -Property NamedIndividual | Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"})
-                    {
-                        # For each association
-                        foreach ($node in $nodes)
-                        {
-                            # Remove ClassAssociation from Ontology node
-                            $xml.Ontology.RemoveChild($node) | Out-Null
-                        }
-                    }
-
-                    # Get instance declaration node
-                    $node = $xml.Ontology.Declaration | Where-Object -Property NamedIndividual | Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"}
-                    # Remove instance declaration node from children of Ontology node
-                    $xml.Ontology.RemoveChild($node) | Out-Null
-                    # Save file
-                    $xml.Save($path)
+                    # Instance is not found
+                    Write-Output -InputObject "Instance is not exist: $InstanceName"
                 }
             }
             else
             {
-                # Instance is not found
-                Write-Output -InputObject "Instance is not exist: $InstanceName"
+                # InstanceName is not specified
+                Write-Output -InputObject "Instance name is not specified"
             }
         }
         else
@@ -234,59 +252,68 @@ function Rename-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
-            # Create new object
-            $xml = New-Object -TypeName System.Xml.XmlDocument
-            # Load XML file
-            $xml.Load($path)
-
-            # If instance exists
-            if ($node = $xml.Ontology.Declaration.NamedIndividual | Where-Object -Property IRI -eq -Value "#$InstanceName")
+            # If InstanceName is specified
+            if ($InstanceName)
             {
-                # If NewInstanceName is specified
-                if ($NewInstanceName)
+                # Create new object
+                $xml = New-Object -TypeName System.Xml.XmlDocument
+                # Load XML file
+                $xml.Load($path)
+
+                # If instance exists
+                if ($node = $xml.Ontology.Declaration.NamedIndividual | Where-Object -Property IRI -eq -Value "#$InstanceName")
                 {
-                    # Rename instance
-                    $node.SetAttribute("IRI", "#$NewInstanceName")
-                    
-                    # If the instance is associated with classes
-                    if ($nodes = $xml.Ontology.ClassAssertion |
-                                Where-Object -Property NamedIndividual |
-                                Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
-                                ForEach-Object -MemberName NamedIndividual)
+                    # If NewInstanceName is specified
+                    if ($NewInstanceName)
                     {
-                        foreach($node in $nodes)
+                        # Rename instance
+                        $node.SetAttribute("IRI", "#$NewInstanceName")
+                        
+                        # If the instance is associated with classes
+                        if ($nodes = $xml.Ontology.ClassAssertion |
+                                    Where-Object -Property NamedIndividual |
+                                    Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
+                                    ForEach-Object -MemberName NamedIndividual)
                         {
-                            # Rename instance in ClassAssertion node
-                            $node.SetAttribute("IRI", "#$NewInstanceName")
+                            foreach($node in $nodes)
+                            {
+                                # Rename instance in ClassAssertion node
+                                $node.SetAttribute("IRI", "#$NewInstanceName")
+                            }
                         }
-                    }
 
-                    # If there are properties associated with the instance
-                    if ($nodes = $xml.Ontology.DataPropertyAssertion |
-                                Where-Object -Property NamedIndividual |
-                                Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
-                                ForEach-Object -MemberName NamedIndividual)
+                        # If there are properties associated with the instance
+                        if ($nodes = $xml.Ontology.DataPropertyAssertion |
+                                    Where-Object -Property NamedIndividual |
+                                    Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -eq "#$InstanceName"} |
+                                    ForEach-Object -MemberName NamedIndividual)
+                        {
+                            foreach ($node in $nodes)
+                            {
+                                # Rename instance in DataPropertyAssertion node
+                                $node.SetAttribute("IRI", "#$NewInstanceName")
+                            }
+                        }
+
+                        # Save file
+                        $xml.Save($path)
+                    }
+                    else
                     {
-                        foreach ($node in $nodes)
-                        {
-                            # Rename instance in DataPropertyAssertion node
-                            $node.SetAttribute("IRI", "#$NewInstanceName")
-                        }
+                        # NewInstanceName is not specified
+                        Write-Output -InputObject "New instance name is not specified"
                     }
-
-                    # Save file
-                    $xml.Save($path)
                 }
                 else
                 {
-                    # NewInstanceName is not specified
-                    Write-Output -InputObject "New instance name is not specified"
+                    # Instance is not found
+                    Write-Output -InputObject "Instance is not exist: $InstanceName"
                 }
             }
             else
             {
-                # Instance is not found
-                Write-Output -InputObject "Instance is not exist: $InstanceName"
+                # InstanceName is not specified
+                Write-Output -InputObject "Instance name is not specified"
             }
         }
         else
