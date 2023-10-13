@@ -190,7 +190,7 @@ function Import-OwlOntology
                 }
 
                 # Save file
-                $xml.Save("C:\t.xml")
+                $xml.Save($path)
             }
             else
             {
