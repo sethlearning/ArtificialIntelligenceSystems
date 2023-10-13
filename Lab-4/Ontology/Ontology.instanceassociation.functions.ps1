@@ -62,8 +62,8 @@ function Add-OwlInstanceAssociation
                         }
                         else
                         {
-                            # Class is not exist
-                            Write-Output -InputObject "Class is not exist: $class"
+                            # Class is not found
+                            Write-Output -InputObject "Class does not exist: $class"
                         }
                     }
                     # Save file
@@ -72,7 +72,7 @@ function Add-OwlInstanceAssociation
                 else
                 {
                     # Instance is not found
-                    Write-Output -InputObject "Instance is not exist: $InstanceName"
+                    Write-Output -InputObject "Instance does not exist: $InstanceName"
                 }
             }
             else
@@ -151,8 +151,8 @@ function Remove-OwlInstanceAssociation
                             }
                             else
                             {
-                                # Class is not exist
-                                Write-Output -InputObject "Class is not exist: $class"
+                                # Class is not found
+                                Write-Output -InputObject "Class does not exist: $class"
                             }
                         }
                     }
@@ -178,7 +178,7 @@ function Remove-OwlInstanceAssociation
                 else
                 {
                     # Instance is not found
-                    Write-Output -InputObject "Instance is not exist: $InstanceName"
+                    Write-Output -InputObject "Instance does not exist: $InstanceName"
                 }
             }
             else
@@ -280,8 +280,8 @@ function Set-OwlInstanceAssociation
                         }
                         else
                         {
-                            # Class is not exist
-                            Write-Output -InputObject "Class is not exist: $class"
+                            # Class is not found
+                            Write-Output -InputObject "Class does not exist: $class"
                         }
                     }
                     # Save file
@@ -290,7 +290,7 @@ function Set-OwlInstanceAssociation
                 else
                 {
                     # Instance is not found
-                    Write-Output -InputObject "Instance is not exist: $InstanceName"
+                    Write-Output -InputObject "Instance does not exist: $InstanceName"
                 }
             }
             else

@@ -82,14 +82,14 @@ function New-OwlClass
                 # If class exists
                 if ("#$ClassName" -cin $xml.Ontology.Declaration.Class.IRI)
                 {
-                    Write-Output -InputObject "The class is already exist"
+                    Write-Output -InputObject "The class already exists"
                 }
                 else
                 {
                     # If Parent class name is specified and there are no such a class
                     if ($ParentClassName -and "#$ParentClassName" -cnotin $xml.Ontology.Declaration.Class.IRI)
                     {
-                        Write-Output -InputObject "There are no such a parent class"
+                        Write-Output -InputObject "Parent class does not exist: $ParentClassName"
                         return
                     }
 
@@ -204,7 +204,7 @@ function Remove-OwlClass
                 else
                 {
                     # Class is not found
-                    Write-Output -InputObject "Class is not exist: $ClassName"
+                    Write-Output -InputObject "Class does not exist: $ClassName"
                 }
             }
             else
@@ -320,7 +320,7 @@ function Rename-OwlClass
                 else
                 {
                     # Class is not found
-                    Write-Output -InputObject "Class is not exist: $ClassName"
+                    Write-Output -InputObject "Class does not exist: $ClassName"
                 }
             }
             else
