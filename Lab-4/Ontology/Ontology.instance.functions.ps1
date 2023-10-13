@@ -65,7 +65,8 @@ function New-OwlInstance
     Param (
         [string]$FileName,
         [string]$InstanceName,
-        [string[]]$ClassName
+        [string[]]$ClassName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -74,6 +75,18 @@ function New-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            if ($SaveToFile)
+            {
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If InstanceName is specified
             if ($InstanceName)
             {
@@ -141,7 +154,7 @@ function New-OwlInstance
                     }
 
                     # Save file
-                    $xml.Save($path)
+                    $xml.Save($SaveToFile)
                 }
             }
             else
@@ -167,7 +180,8 @@ function Remove-OwlInstance
 {
     Param (
         [string]$FileName,
-        [string]$InstanceName
+        [string]$InstanceName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -176,6 +190,18 @@ function Remove-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            if ($SaveToFile)
+            {
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If InstanceName is specified
             if ($InstanceName)
             {
@@ -210,7 +236,7 @@ function Remove-OwlInstance
                         # Remove instance declaration node from children of Ontology node
                         $xml.Ontology.RemoveChild($node) | Out-Null
                         # Save file
-                        $xml.Save($path)
+                        $xml.Save($SaveToFile)
                     }
                 }
                 else
@@ -243,7 +269,8 @@ function Rename-OwlInstance
     Param (
         [string]$FileName,
         [string]$InstanceName,
-        [string]$NewInstanceName
+        [string]$NewInstanceName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -252,6 +279,18 @@ function Rename-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            if ($SaveToFile)
+            {
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If InstanceName is specified
             if ($InstanceName)
             {
@@ -296,7 +335,7 @@ function Rename-OwlInstance
                         }
 
                         # Save file
-                        $xml.Save($path)
+                        $xml.Save($SaveToFile)
                     }
                     else
                     {

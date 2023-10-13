@@ -62,7 +62,8 @@ function New-OwlClass
     Param(
         [string]$FileName,
         [string]$ClassName,
-        [string]$ParentClassName
+        [string]$ParentClassName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -71,6 +72,18 @@ function New-OwlClass
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            if ($SaveToFile)
+            {
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If ClassName is specified
             if ($ClassName)
             {
@@ -129,7 +142,7 @@ function New-OwlClass
                     }
 
                     # Save file
-                    $xml.Save($path)
+                    $xml.Save($SaveToFile)
                 }
             }
             else
@@ -155,7 +168,8 @@ function Remove-OwlClass
 {
     Param(
         [string]$FileName,
-        [string]$ClassName
+        [string]$ClassName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -164,6 +178,18 @@ function Remove-OwlClass
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            if ($SaveToFile)
+            {
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If ClassName is specified
             if ($ClassName)
             {
@@ -198,7 +224,7 @@ function Remove-OwlClass
                         # Remove class declaration node from children of Ontology node
                         $xml.Ontology.RemoveChild($node) | Out-Null
                         # Save file
-                        $xml.Save($path)
+                        $xml.Save($SaveToFile)
                     }
                 }
                 else
@@ -231,7 +257,8 @@ function Rename-OwlClass
     Param(
         [string]$FileName,
         [string]$ClassName,
-        [string]$NewClassName
+        [string]$NewClassName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -240,6 +267,18 @@ function Rename-OwlClass
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            if ($SaveToFile)
+            {
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If ClassName is specified
             if ($ClassName)
             {
@@ -309,7 +348,7 @@ function Rename-OwlClass
                             }
                         }
                         # Save file
-                        $xml.Save($path)
+                        $xml.Save($SaveToFile)
                     }
                     else
                     {

@@ -2,7 +2,8 @@ function Import-OwlOntology
 {
     Param(
         [string]$FileName,
-        [string]$Url = "https://www.simplilearn.com/best-programming-languages-start-learning-today-article"
+        [string]$Url = "https://www.simplilearn.com/best-programming-languages-start-learning-today-article",
+        [string]$SaveToFile
     )
 
     $ClassName = "Language"
@@ -13,6 +14,18 @@ function Import-OwlOntology
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            if ($SaveToFile)
+            {
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # Create new object
             $xml = New-Object -TypeName System.Xml.XmlDocument
             # Load XML file
@@ -190,7 +203,7 @@ function Import-OwlOntology
                 }
 
                 # Save file
-                $xml.Save($path)
+                $xml.Save($SaveToFile)
             }
             else
             {
