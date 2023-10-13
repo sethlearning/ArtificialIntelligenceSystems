@@ -29,26 +29,26 @@ function Import-OwlOntology
                 # Get articles
                 $articles = $ms.Matches.Value
 
-                # $patterntable1 = '(?sx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
-                # <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
-                # <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*
-                # (<p>Platform:</p>\s?</td>\s?<td>\s?<p>(?<Platform>.*?)</p>.*)?
-                # <p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<p>(?<PopularityAmongProgrammers>.*?)</p>.*
-                # <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*
-                # (<p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>\s?</td>.*)?
-                # <p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*
-                # <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
-                # </table>'
-                $patterntable1 = '(?sx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
+                $patterntable1 = '(?snx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
                 <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
-                <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*
-                <p>Platform:</p>\s?</td>\s?<td>\s?<p>(?<Platform>.*?)</p>.*
+                <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*? # greedy any character
+                (<p>Platform:</p>\s?</td>\s?<td>\s?<p>(?<Platform>.*?)</p>.*)?
                 <p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<p>(?<PopularityAmongProgrammers>.*?)</p>.*
-                <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*
-                <p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>\s?</td>.*
+                <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*? # greedy any character
+                (<p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>\s?</td>.*)?
                 <p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*
                 <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
                 </table>'
+                # $patterntable1 = '(?sx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
+                # <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
+                # <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*
+                # <p>Platform:</p>\s?</td>\s?<td>\s?<p>(?<Platform>.*?)</p>.*
+                # <p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<p>(?<PopularityAmongProgrammers>.*?)</p>.*
+                # <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*
+                # <p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>\s?</td>.*
+                # <p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*
+                # <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
+                # </table>'
                 # $patterntable1 = '(?sx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
                 # <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
                 # <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*
@@ -132,14 +132,38 @@ function Import-OwlOntology
 
                         Write-Output -InputObject "Adding: $InstanceName"
                         inAddInstance -xml $xml -InstanceName $InstanceName -ClassName $ClassName
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Level -InstanceName $InstanceName -Value $Level
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName SkillsNeeded -InstanceName $InstanceName -Value $SkillsNeeded
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Platform -InstanceName $InstanceName -Value $Platform
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName PopularityAmongProgrammers -InstanceName $InstanceName -Value $PopularityAmongProgrammers
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Benefits -InstanceName $InstanceName -Value $Benefits
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Downsides -InstanceName $InstanceName -Value $Downsides
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName DegreeOfUse -InstanceName $InstanceName -Value $DegreeOfUse
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName AnnualSalaryProjection -InstanceName $InstanceName -Value $AnnualSalaryProjection
+                        if ($Level)
+                        {
+                            inAddDataPropertyAssertion -xml $xml -DataPropertyName Level -InstanceName $InstanceName -Value $Level
+                        }
+                        if ($SkillsNeeded)
+                        {
+                            inAddDataPropertyAssertion -xml $xml -DataPropertyName SkillsNeeded -InstanceName $InstanceName -Value $SkillsNeeded
+                        }
+                        if ($Platform) # Can be empty
+                        {
+                            inAddDataPropertyAssertion -xml $xml -DataPropertyName Platform -InstanceName $InstanceName -Value $Platform
+                        }
+                        if ($PopularityAmongProgrammers)
+                        {
+                            inAddDataPropertyAssertion -xml $xml -DataPropertyName PopularityAmongProgrammers -InstanceName $InstanceName -Value $PopularityAmongProgrammers
+                        }
+                        if ($Benefits)
+                        {
+                            inAddDataPropertyAssertion -xml $xml -DataPropertyName Benefits -InstanceName $InstanceName -Value $Benefits
+                        }
+                        if ($Downsides) # Can be empty
+                        {
+                            inAddDataPropertyAssertion -xml $xml -DataPropertyName Downsides -InstanceName $InstanceName -Value $Downsides
+                        }
+                        if ($DegreeOfUse)
+                        {
+                            inAddDataPropertyAssertion -xml $xml -DataPropertyName DegreeOfUse -InstanceName $InstanceName -Value $DegreeOfUse
+                        }
+                        if ($AnnualSalaryProjection)
+                        {
+                            inAddDataPropertyAssertion -xml $xml -DataPropertyName AnnualSalaryProjection -InstanceName $InstanceName -Value $AnnualSalaryProjection
+                        }
 
                     }
                     # If does not contain table
