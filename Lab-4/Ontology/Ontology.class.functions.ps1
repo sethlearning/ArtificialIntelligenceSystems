@@ -405,6 +405,7 @@ function Set-OwlClassParent
         [string[]]$ParentClassName,
         [Parameter(ParameterSetName='Top')]
         [switch]$Top,
+        [switch]$Recurse,
         [Parameter(Position=3)]
         [string]$SaveToFile
     )
@@ -464,7 +465,7 @@ function Set-OwlClassParent
                         else
                         {
                             # If the class is a parent to another classes
-                            if ($childclasses)
+                            if ($childclasses -and -not $Recurse)
                             {
                                 Write-Output -InputObject "Class has child classes: $childclasses"
                                 return
@@ -509,7 +510,7 @@ function Set-OwlClassParent
                         else
                         {
                             # If the class is a parent to another classes
-                            if ($childclasses)
+                            if ($childclasses -and -not $Recurse)
                             {
                                 Write-Output -InputObject "Class has child classes: $childclasses"
                                 return
