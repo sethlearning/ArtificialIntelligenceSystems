@@ -426,74 +426,85 @@ function Set-OwlClassParent
                 # If class exists
                 if ("#$ClassName" -cin $xml.Ontology.Declaration.Class.IRI)
                 {
-                    # If the class is parent to another class(es)
+                    # Get a parent class of the class
+                    $parentnode = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI -ceq "#$ClassName"}
+
+                    # Get child classes of the class
                     if ($childnodes = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[1].IRI -ceq "#$ClassName"})
                     {
-                        $classlist = Join-String -InputObject ($childnodes | Where-Object -Property Class | ForEach-Object -Process {$PSItem.Class[0].IRI.Trim('#')}) -Separator ', '
-                        Write-Output -InputObject "Class has child classes: $classlist"
+                        # Create comma-separated child class list
+                        $childclasses = Join-String -InputObject ($childnodes | Where-Object -Property Class | ForEach-Object -Process {$PSItem.Class[0].IRI.Trim('#')}) -Separator ', '
                     }
-                    # If the class does not have child classes, so it can be moved within hierarchy
-                    else
-                    {
-                        # Get a parent of the class
-                        $parentnode = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI -ceq "#$ClassName"}
 
-                        # If ParentClassName is specified
-                        if ($ParentClassName)
+                    # If ParentClassName is specified
+                    if ($ParentClassName)
+                    {
+                        # If specified ParentClassName is already a parent
+                        if ($ParentClassName -eq ($parentnode | Where-Object -Property Class | ForEach-Object -Process {$PSItem.Class[1].IRI.Trim('#')}))
                         {
-                            # If specified ParentClassName is already a parent
-                            if ($ParentClassName -eq ($parentnode | Where-Object -Property Class | ForEach-Object -Process {$PSItem.Class[1].IRI.Trim('#')}))
+                            Write-Output -InputObject "Specified parent class is already a parent: $ParentClassName"
+                            return
+                        }
+                        else
+                        {
+                            # If the class is a parent to another classes
+                            if ($childclasses)
                             {
-                                Write-Output -InputObject "Specified parent class is already a parent: $ParentClassName"
+                                Write-Output -InputObject "Class has child classes: $childclasses"
                                 return
                             }
-                            else
-                            {
-                                # If the class has parent
-                                if ($parentnode)
-                                {
-                                    # Remove corresponding SubClassOf node from Ontology node
-                                    $xml.Ontology.RemoveChild($parentnode) | Out-Null
-                                }
 
-                                # Create SubClassOf node
-                                $subclassof = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "SubClassOf", $xml.DocumentElement.NamespaceURI)
-                                # Create child Class node
-                                $childclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
-                                # Set child Class node attribute
-                                $childclass.SetAttribute("IRI", "#" + $ClassName)
-                                # Create parent Class node
-                                $parentclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
-                                # Set parent Class node attribute
-                                $parentclass.SetAttribute("IRI", "#" + $ParentClassName)
-                                # Append child Class node as a child to SubClassOf node
-                                $subclassof.AppendChild($childclass) | Out-Null
-                                # Append parent Class node as a child to SubClassOf node
-                                $subclassof.AppendChild($parentclass) | Out-Null
-                                # Append SubClassOf node as a child to Ontology node
-                                $xml.Ontology.AppendChild($subclassof) | Out-Null
-                            }
-                        }
-
-                        # If ParentClassName is not specified of Top parameter is used
-                        elseif (-not $ParentClassName -or $Top)
-                        {
                             # If the class has parent
                             if ($parentnode)
                             {
                                 # Remove corresponding SubClassOf node from Ontology node
                                 $xml.Ontology.RemoveChild($parentnode) | Out-Null
                             }
-                            # If the class does not have a parent
-                            else
+
+                            # Create SubClassOf node
+                            $subclassof = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "SubClassOf", $xml.DocumentElement.NamespaceURI)
+                            # Create child Class node
+                            $childclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
+                            # Set child Class node attribute
+                            $childclass.SetAttribute("IRI", "#" + $ClassName)
+                            # Create parent Class node
+                            $parentclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
+                            # Set parent Class node attribute
+                            $parentclass.SetAttribute("IRI", "#" + $ParentClassName)
+                            # Append child Class node as a child to SubClassOf node
+                            $subclassof.AppendChild($childclass) | Out-Null
+                            # Append parent Class node as a child to SubClassOf node
+                            $subclassof.AppendChild($parentclass) | Out-Null
+                            # Append SubClassOf node as a child to Ontology node
+                            $xml.Ontology.AppendChild($subclassof) | Out-Null
+                        }
+                    }
+
+                    # If ParentClassName is not specified of Top parameter is used
+                    elseif (-not $ParentClassName -or $Top)
+                    {
+                        # If the class does not have a parent
+                        if (-not $parentnode)
+                        {
+                            Write-Output -InputObject "The class is already on the top level"
+                            return
+                        }
+                        # If the class has parent
+                        else
+                        {
+                            # If the class is a parent to another classes
+                            if ($childclasses)
                             {
-                                Write-Output -InputObject "The class is already on the top level"
+                                Write-Output -InputObject "Class has child classes: $childclasses"
                                 return
                             }
+
+                            # Remove corresponding SubClassOf node from Ontology node
+                            $xml.Ontology.RemoveChild($parentnode) | Out-Null
                         }
-                        # Save file
-                        $xml.Save($SaveToFile)
                     }
+                    # Save file
+                    $xml.Save($SaveToFile)
                 }
                 else
                 {
