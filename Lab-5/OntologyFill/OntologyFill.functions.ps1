@@ -29,6 +29,7 @@ function Import-OwlOntology
                 # Get articles
                 $articles = $ms.Matches.Value
 
+                # Pattern for tables
                 $patterntable = '(?snx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
                                  <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
                                  <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*?
@@ -69,6 +70,8 @@ function Import-OwlOntology
                 # <p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*
                 # <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
                 # </table>'
+
+                # Pattern for lists
                 $patternul = '(?snx)<h2\sid.*?>\d+\.\s(?<Name>.+?)\s?</h2>.*?
                               <h3>Benefits.*?</h3>\s<ul>\s(?<Benefits>.*?)\s</ul>.*?
                               <h3>Con.*?</h3>.*?\s<ul>\s(?<Downsides>.*?)\s</ul>'
@@ -79,11 +82,10 @@ function Import-OwlOntology
                 # For each article
                 foreach ($article in $articles)
                 {
-                    # If contains table form 1
+                    # If article corresponds to table or list form
                     if (($ms = Select-String -InputObject $article -Pattern $patterntable) -or ($ms = Select-String -InputObject $article -Pattern $patternul))
                     {
                         # Instance name
-                        # $InstanceName = $ms.Matches.Groups[1].Value -replace '\s', '_' -replace '#','S'
                         $InstanceName = ($ms.Matches.Groups |
                                          Where-Object -Property Name -eq -Value 'Name' |
                                          Select-Object -ExpandProperty Value) `
@@ -91,25 +93,21 @@ function Import-OwlOntology
                                          -replace '#','S'
 
                         # Level
-                        # $Level = $ms.Matches.Groups[2].Value
                         $Level = $ms.Matches.Groups |
                                  Where-Object -Property Name -eq -Value 'Level' |
                                  Select-Object -ExpandProperty Value
 
                         # Skills needed
-                        # $SkillsNeeded = $ms.Matches.Groups[3].Value
                         $SkillsNeeded = $ms.Matches.Groups |
                                         Where-Object -Property Name -eq -Value 'Skills' |
                                         Select-Object -ExpandProperty Value
 
                         # Platform
-                        # $Platform = $ms.Matches.Groups[4].Value
                         $Platform = $ms.Matches.Groups |
                                     Where-Object -Property Name -eq -Value 'Platform' |
                                     Select-Object -ExpandProperty Value
 
                         # Popularity among programmers
-                        # $PopularityAmongProgrammers = $ms.Matches.Groups[5].Value
                         $PopularityAmongProgrammers = ($ms.Matches.Groups |
                                                        Where-Object -Property Name -eq -Value 'PopularityAmongProgrammers' |
                                                        Select-Object -ExpandProperty Value) `
@@ -129,7 +127,6 @@ function Import-OwlOntology
                                      -replace ';;',';'
 
                         # Downsides
-                        # $Downsides = $ms.Matches.Groups[7].Value -replace '·\s+','' -replace '</p>\n<p>','; '
                         $Downsides = ($ms.Matches.Groups |
                                       Where-Object -Property Name -eq -Value 'Downsides' |
                                       Select-Object -ExpandProperty Value) `
@@ -140,7 +137,6 @@ function Import-OwlOntology
                                       -replace '</p>\n<p>','; '
 
                         # Degree of use
-                        # $DegreeOfUse = $ms.Matches.Groups[8].Value
                         $DegreeOfUse = ($ms.Matches.Groups |
                                        Where-Object -Property Name -eq -Value 'DegreeOfUse' |
                                        Select-Object -ExpandProperty Value) `
@@ -149,13 +145,15 @@ function Import-OwlOntology
                                        -replace '</li>',''
 
                         # Annual salary projections
-                        # $AnnualSalaryProjection = $ms.Matches.Groups[9].Value
                         $AnnualSalaryProjection = $ms.Matches.Groups |
                                                   Where-Object -Property Name -eq -Value AnnualSalaryProjection |
                                                   Select-Object -ExpandProperty Value
 
+                        # Add instance
                         Write-Output -InputObject "Adding: $InstanceName"
                         inAddInstance -xml $xml -InstanceName $InstanceName -ClassName $ClassName
+
+                        # Add data properties
                         if ($Level)
                         {
                             inAddDataPropertyAssertion -xml $xml -DataPropertyName Level -InstanceName $InstanceName -Value $Level
@@ -188,15 +186,7 @@ function Import-OwlOntology
                         {
                             inAddDataPropertyAssertion -xml $xml -DataPropertyName AnnualSalaryProjection -InstanceName $InstanceName -Value $AnnualSalaryProjection
                         }
-
                     }
-                    # If does not contain table
-                    # elseif ($ms = Select-String -InputObject $article -Pattern $patternul)
-                    # {
-                    #     $InstanceName = $ms.Matches.Groups[1].Value -replace '\s', '_' -replace '#','S'
-                    #     Write-Output -InputObject "Adding: $InstanceName"
-                    #     inAddInstance -xml $xml -InstanceName $InstanceName -ClassName $ClassName
-                    # }
                 }
 
                 # Save file
@@ -204,6 +194,7 @@ function Import-OwlOntology
             }
             else
             {
+                # Web page sturcture is different
                 Write-Output -InputObject "Web page does not contain requested data"
             }
         }
@@ -219,7 +210,6 @@ function Import-OwlOntology
         Write-Output -InputObject "File name is not specified"
     }
 }
-
 
 function inAddInstance
 {
