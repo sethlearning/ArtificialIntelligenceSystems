@@ -435,20 +435,16 @@ function Set-OwlClassParent
                     # If the class does not have child classes, so it can be moved within hierarchy
                     else
                     {
-                        # If the class has parent
-                        if($parentnode = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI -ceq "#$ClassName"})
-                        {
-                            # Get parent of the class
-                            $parentclass = $parentnode | Where-Object -Property Class | ForEach-Object -Process {$PSItem.Class[1].IRI.Trim('#')}
-                        }
+                        # Get a parent of the class
+                        $parentnode = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI -ceq "#$ClassName"}
 
                         # If ParentClassName is specified
                         if ($ParentClassName)
                         {
                             # If specified ParentClassName is already a parent
-                            if ($ParentClassName -eq $parentclass)
+                            if ($ParentClassName -eq ($parentnode | Where-Object -Property Class | ForEach-Object -Process {$PSItem.Class[1].IRI.Trim('#')}))
                             {
-                                Write-Output -InputObject "Specified parent class is already a parent: $parentclass"
+                                Write-Output -InputObject "Specified parent class is already a parent: $ParentClassName"
                                 return
                             }
                             else
@@ -482,17 +478,17 @@ function Set-OwlClassParent
                         # If ParentClassName is not specified of Top parameter is used
                         elseif (-not $ParentClassName -or $Top)
                         {
-                            # If the class does not have a parent
-                            if (-not $parentnode)
-                            {
-                                Write-Output -InputObject "The class is already on the top level"
-                                return
-                            }
                             # If the class has parent
-                            else
+                            if ($parentnode)
                             {
                                 # Remove corresponding SubClassOf node from Ontology node
                                 $xml.Ontology.RemoveChild($parentnode) | Out-Null
+                            }
+                            # If the class does not have a parent
+                            else
+                            {
+                                Write-Output -InputObject "The class is already on the top level"
+                                return
                             }
                         }
                         # Save file
