@@ -31,14 +31,24 @@ function Import-OwlOntology
 
                 $patterntable1 = '(?snx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
                 <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
-                <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*? # greedy any character
+                <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*?
                 (<p>Platform:</p>\s?</td>\s?<td>\s?<p>(?<Platform>.*?)</p>.*)?
-                <p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<p>(?<PopularityAmongProgrammers>.*?)</p>.*
-                <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*? # greedy any character
-                (<p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>\s?</td>.*)?
-                <p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*
+                ((<p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<p>(?<PopularityAmongProgrammers>.*?)</p>.*)|(<p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<ul>\s?(?<PopularityAmongProgrammers>.*?)\s?</ul>.*?))
+                <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*?
+                ((<p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>\s?</td>.*)|(<p>Downsides:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Downsides>.*?)\s?</ul>.*))?
+                ((<p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*)|(<p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<ul>\s?(?<DegreeOfUse>.*?)\s?</ul>.*))
                 <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
                 </table>'
+                # $patterntable1 = '(?snx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
+                # <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
+                # <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*? # greedy any character
+                # (<p>Platform:</p>\s?</td>\s?<td>\s?<p>(?<Platform>.*?)</p>.*)?
+                # <p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<p>(?<PopularityAmongProgrammers>.*?)</p>.*
+                # <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*? # greedy any character
+                # (<p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>\s?</td>.*)?
+                # <p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*
+                # <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
+                # </table>'
                 # $patterntable1 = '(?sx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
                 # <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
                 # <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*
@@ -95,10 +105,13 @@ function Import-OwlOntology
 
                         # Popularity among programmers
                         # $PopularityAmongProgrammers = $ms.Matches.Groups[5].Value
-                        $PopularityAmongProgrammers = $ms.Matches.Groups |
-                                                      Where-Object -Property Name -eq -Value 'PopularityAmongProgrammers' |
-                                                      Select-Object -ExpandProperty Value
-                                                      
+                        $PopularityAmongProgrammers = ($ms.Matches.Groups |
+                                                       Where-Object -Property Name -eq -Value 'PopularityAmongProgrammers' |
+                                                       Select-Object -ExpandProperty Value) `
+                                                       -replace '\s?</li>\n<li aria-level="1">','; ' `
+                                                       -replace '<li aria-level="1">','' `
+                                                       -replace '</li>',''
+
                         # Benefits
                         $Benefits = ($ms.Matches.Groups |
                                      Where-Object -Property Name -eq -Value 'Benefits' |
@@ -115,14 +128,20 @@ function Import-OwlOntology
                         $Downsides = ($ms.Matches.Groups |
                                       Where-Object -Property Name -eq -Value 'Downsides' |
                                       Select-Object -ExpandProperty Value) `
+                                      -replace '\s?</li>\n<li aria-level="1">','; ' `
+                                      -replace '<li aria-level="1">','' `
+                                      -replace '</li>','' `
                                       -replace '·\s+','' `
                                       -replace '</p>\n<p>','; '
 
                         # Degree of use
                         # $DegreeOfUse = $ms.Matches.Groups[8].Value
-                        $DegreeOfUse = $ms.Matches.Groups |
+                        $DegreeOfUse = ($ms.Matches.Groups |
                                        Where-Object -Property Name -eq -Value 'DegreeOfUse' |
-                                       Select-Object -ExpandProperty Value
+                                       Select-Object -ExpandProperty Value) `
+                                       -replace '\s?</li>\n<li aria-level="1">','; ' `
+                                       -replace '<li aria-level="1">','' `
+                                       -replace '</li>',''
 
                         # Annual salary projections
                         # $AnnualSalaryProjection = $ms.Matches.Groups[9].Value
