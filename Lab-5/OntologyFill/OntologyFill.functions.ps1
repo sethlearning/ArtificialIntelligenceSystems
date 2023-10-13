@@ -29,6 +29,16 @@ function Import-OwlOntology
                 # Get articles
                 $articles = $ms.Matches.Value
 
+                # $patterntable1 = '(?sx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
+                # <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
+                # <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*
+                # (<p>Platform:</p>\s?</td>\s?<td>\s?<p>(?<Platform>.*?)</p>.*)?
+                # <p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<p>(?<PopularityAmongProgrammers>.*?)</p>.*
+                # <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*
+                # (<p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>\s?</td>.*)?
+                # <p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*
+                # <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
+                # </table>'
                 $patterntable1 = '(?sx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
                 <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
                 <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*
@@ -58,40 +68,77 @@ function Import-OwlOntology
                     if ($ms = Select-String -InputObject $article -Pattern $patterntable1)
                     {
                         # Instance name
-                        $InstanceName = $ms.Matches.Groups[1].Value -replace '\s', '_' -replace '#','S'
-                        Write-Output -InputObject "Adding: $InstanceName"
-                        inAddInstance -xml $xml -InstanceName $InstanceName -ClassName $ClassName
-                        
+                        # $InstanceName = $ms.Matches.Groups[1].Value -replace '\s', '_' -replace '#','S'
+                        $InstanceName = ($ms.Matches.Groups |
+                                         Where-Object -Property Name -eq -Value 'Name' |
+                                         Select-Object -ExpandProperty Value) `
+                                         -replace '\s', '_' `
+                                         -replace '#','S'
+
                         # Level
-                        $Level = $ms.Matches.Groups[2].Value
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Level -InstanceName $InstanceName -Value $Level
-                        
+                        # $Level = $ms.Matches.Groups[2].Value
+                        $Level = $ms.Matches.Groups |
+                                 Where-Object -Property Name -eq -Value 'Level' |
+                                 Select-Object -ExpandProperty Value
+
                         # Skills needed
-                        $SkillsNeeded = $ms.Matches.Groups[3].Value
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName SkillsNeeded -InstanceName $InstanceName -Value $SkillsNeeded
+                        # $SkillsNeeded = $ms.Matches.Groups[3].Value
+                        $SkillsNeeded = $ms.Matches.Groups |
+                                        Where-Object -Property Name -eq -Value 'Skills' |
+                                        Select-Object -ExpandProperty Value
 
                         # Platform
-                        $Platform = $ms.Matches.Groups[4].Value
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Platform -InstanceName $InstanceName -Value $Platform
+                        # $Platform = $ms.Matches.Groups[4].Value
+                        $Platform = $ms.Matches.Groups |
+                                    Where-Object -Property Name -eq -Value 'Platform' |
+                                    Select-Object -ExpandProperty Value
 
                         # Popularity among programmers
-                        $PopularityAmongProgrammers = $ms.Matches.Groups[5].Value
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName PopularityAmongProgrammers -InstanceName $InstanceName -Value $PopularityAmongProgrammers
-
+                        # $PopularityAmongProgrammers = $ms.Matches.Groups[5].Value
+                        $PopularityAmongProgrammers = $ms.Matches.Groups |
+                                                      Where-Object -Property Name -eq -Value 'PopularityAmongProgrammers' |
+                                                      Select-Object -ExpandProperty Value
+                                                      
                         # Benefits
-                        $Benefits = $ms.Matches.Groups[6].Value -replace '\s?</li>\n<li aria-level="1">','; ' -replace '\s?</li>\n<li>','; ' -replace '<li aria-level="1">','' -replace '<li>','' -replace '</li>','' -replace ';;',';'
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Benefits -InstanceName $InstanceName -Value $Benefits
+                        $Benefits = ($ms.Matches.Groups |
+                                     Where-Object -Property Name -eq -Value 'Benefits' |
+                                     Select-Object -ExpandProperty 'Value') `
+                                     -replace '\s?</li>\n<li aria-level="1">','; ' `
+                                     -replace '\s?</li>\n<li>','; ' `
+                                     -replace '<li aria-level="1">','' `
+                                     -replace '<li>','' `
+                                     -replace '</li>','' `
+                                     -replace ';;',';'
 
                         # Downsides
-                        $Downsides = $ms.Matches.Groups[7].Value -replace '·\s+','' -replace '</p>\n<p>','; '
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Downsides -InstanceName $InstanceName -Value $Downsides
+                        # $Downsides = $ms.Matches.Groups[7].Value -replace '·\s+','' -replace '</p>\n<p>','; '
+                        $Downsides = ($ms.Matches.Groups |
+                                      Where-Object -Property Name -eq -Value 'Downsides' |
+                                      Select-Object -ExpandProperty Value) `
+                                      -replace '·\s+','' `
+                                      -replace '</p>\n<p>','; '
 
                         # Degree of use
-                        $DegreeOfUse = $ms.Matches.Groups[8].Value
-                        inAddDataPropertyAssertion -xml $xml -DataPropertyName DegreeOfUse -InstanceName $InstanceName -Value $DegreeOfUse
+                        # $DegreeOfUse = $ms.Matches.Groups[8].Value
+                        $DegreeOfUse = $ms.Matches.Groups |
+                                       Where-Object -Property Name -eq -Value 'DegreeOfUse' |
+                                       Select-Object -ExpandProperty Value
 
                         # Annual salary projections
-                        $AnnualSalaryProjection = $ms.Matches.Groups[9].Value
+                        # $AnnualSalaryProjection = $ms.Matches.Groups[9].Value
+                        $AnnualSalaryProjection = $ms.Matches.Groups |
+                                                  Where-Object -Property Name -eq -Value AnnualSalaryProjection |
+                                                  Select-Object -ExpandProperty Value
+
+                        Write-Output -InputObject "Adding: $InstanceName"
+                        inAddInstance -xml $xml -InstanceName $InstanceName -ClassName $ClassName
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Level -InstanceName $InstanceName -Value $Level
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName SkillsNeeded -InstanceName $InstanceName -Value $SkillsNeeded
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Platform -InstanceName $InstanceName -Value $Platform
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName PopularityAmongProgrammers -InstanceName $InstanceName -Value $PopularityAmongProgrammers
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Benefits -InstanceName $InstanceName -Value $Benefits
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Downsides -InstanceName $InstanceName -Value $Downsides
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName DegreeOfUse -InstanceName $InstanceName -Value $DegreeOfUse
                         inAddDataPropertyAssertion -xml $xml -DataPropertyName AnnualSalaryProjection -InstanceName $InstanceName -Value $AnnualSalaryProjection
 
                     }
