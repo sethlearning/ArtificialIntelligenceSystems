@@ -75,13 +75,17 @@ function New-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
             if ($SaveToFile)
             {
+                # If path is relative
                 if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
                 {
+                    # Add to the current location
                     $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
                 }
             }
+            # Save to the same file
             else
             {
                 $SaveToFile = $path
@@ -190,13 +194,17 @@ function Remove-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
             if ($SaveToFile)
             {
+                # If path is relative
                 if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
                 {
+                    # Add to the current location
                     $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
                 }
             }
+            # Save to the same file
             else
             {
                 $SaveToFile = $path
@@ -279,13 +287,17 @@ function Rename-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
             if ($SaveToFile)
             {
+                # If path is relative
                 if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
                 {
+                    # Add to the current location
                     $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
                 }
             }
+            # Save to the same file
             else
             {
                 $SaveToFile = $path
