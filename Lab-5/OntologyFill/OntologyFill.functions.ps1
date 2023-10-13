@@ -35,10 +35,20 @@ function Import-OwlOntology
                 <p>Platform:</p>\s?</td>\s?<td>\s?<p>(?<Platform>.*?)</p>.*
                 <p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<p>(?<PopularityAmongProgrammers>.*?)</p>.*
                 <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*
-                <p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>.*
+                <p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>\s?</td>.*
                 <p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*
                 <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
                 </table>'
+                # $patterntable1 = '(?sx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
+                # <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
+                # <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*
+                # <p>Platform:</p>\s?</td>\s?<td>\s?<p>(?<Platform>.*?)</p>.*
+                # <p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<p>(?<PopularityAmongProgrammers>.*?)</p>.*
+                # <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*
+                # <p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>.*
+                # <p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*
+                # <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
+                # </table>'
                 $patternul = '(?s)<h2 id.*?>\d+\. (?<Name>.+?)\s?</h2>.*?(?<Benefits><h3>Benefits.*?</ul>).*?(?<Cons><h3>Con.*?</ul>)'
 
                 # For each article
@@ -55,16 +65,43 @@ function Import-OwlOntology
                         # Level
                         $Level = $ms.Matches.Groups[2].Value
                         inAddDataPropertyAssertion -xml $xml -DataPropertyName Level -InstanceName $InstanceName -Value $Level
+                        
+                        # Skills needed
+                        $SkillsNeeded = $ms.Matches.Groups[3].Value
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName SkillsNeeded -InstanceName $InstanceName -Value $SkillsNeeded
 
+                        # Platform
+                        $Platform = $ms.Matches.Groups[4].Value
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Platform -InstanceName $InstanceName -Value $Platform
+
+                        # Popularity among programmers
+                        $PopularityAmongProgrammers = $ms.Matches.Groups[5].Value
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName PopularityAmongProgrammers -InstanceName $InstanceName -Value $PopularityAmongProgrammers
+
+                        # Benefits
+                        $Benefits = $ms.Matches.Groups[6].Value -replace '\s?</li>\n<li aria-level="1">','; ' -replace '\s?</li>\n<li>','; ' -replace '<li aria-level="1">','' -replace '<li>','' -replace '</li>','' -replace ';;',';'
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Benefits -InstanceName $InstanceName -Value $Benefits
+
+                        # Downsides
+                        $Downsides = $ms.Matches.Groups[7].Value -replace '·\s+','' -replace '</p>\n<p>','; '
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName Downsides -InstanceName $InstanceName -Value $Downsides
+
+                        # Degree of use
+                        $DegreeOfUse = $ms.Matches.Groups[8].Value
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName DegreeOfUse -InstanceName $InstanceName -Value $DegreeOfUse
+
+                        # Annual salary projections
+                        $AnnualSalaryProjection = $ms.Matches.Groups[9].Value
+                        inAddDataPropertyAssertion -xml $xml -DataPropertyName AnnualSalaryProjection -InstanceName $InstanceName -Value $AnnualSalaryProjection
 
                     }
                     # If does not contain table
-                    elseif ($ms = Select-String -InputObject $article -Pattern $patternul)
-                    {
-                        $InstanceName = $ms.Matches.Groups[1].Value -replace '\s', '_' -replace '#','S'
-                        Write-Output -InputObject "Adding: $InstanceName"
-                        inAddInstance -xml $xml -InstanceName $InstanceName -ClassName $ClassName
-                    }
+                    # elseif ($ms = Select-String -InputObject $article -Pattern $patternul)
+                    # {
+                    #     $InstanceName = $ms.Matches.Groups[1].Value -replace '\s', '_' -replace '#','S'
+                    #     Write-Output -InputObject "Adding: $InstanceName"
+                    #     inAddInstance -xml $xml -InstanceName $InstanceName -ClassName $ClassName
+                    # }
                 }
 
                 # Save file
@@ -158,7 +195,7 @@ function inAddDataPropertyAssertion
 {
     Param (
         [System.Xml.XmlDocument]$xml,
-        [ValidateSet('AnnualSalaryProjection', 'Benefits', 'DegreeOfUse', 'Downsides', 'Level', 'Platform', 'Popularity', 'SkillsNeeded')]
+        [ValidateSet('AnnualSalaryProjection', 'Benefits', 'DegreeOfUse', 'Downsides', 'Level', 'Platform', 'PopularityAmongProgrammers', 'SkillsNeeded')]
         [string]$DataPropertyName,
         [string]$InstanceName,
         [string]$Value
