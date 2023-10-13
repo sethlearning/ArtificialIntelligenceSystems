@@ -29,16 +29,16 @@ function Import-OwlOntology
                 # Get articles
                 $articles = $ms.Matches.Value
 
-                $patterntable1 = '(?snx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
-                <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
-                <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*?
-                (<p>Platform:</p>\s?</td>\s?<td>\s?<p>(?<Platform>.*?)</p>.*)?
-                ((<p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<p>(?<PopularityAmongProgrammers>.*?)</p>.*)|(<p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<ul>\s?(?<PopularityAmongProgrammers>.*?)\s?</ul>.*?))
-                <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*?
-                ((<p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>\s?</td>.*)|(<p>Downsides:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Downsides>.*?)\s?</ul>.*))?
-                ((<p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*)|(<p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<ul>\s?(?<DegreeOfUse>.*?)\s?</ul>.*))
-                <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
-                </table>'
+                $patterntable = '(?snx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
+                                 <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
+                                 <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*?
+                                 (<p>Platform:</p>\s?</td>\s?<td>\s?<p>(?<Platform>.*?)</p>.*)?
+                                 ((<p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<p>(?<PopularityAmongProgrammers>.*?)</p>.*)|(<p>Popularity\sAmong\sProgrammers:</p>\s?</td>\s?<td>\s?<ul>\s?(?<PopularityAmongProgrammers>.*?)\s?</ul>.*?))
+                                 <p>Benefits:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Benefits>.*?)\s?</ul>.*?
+                                 ((<p>Downsides:</p>\s?</td>\s?<td>\s?<p>(?<Downsides>.*?)</p>\s?</td>.*)|(<p>Downsides:</p>\s?</td>\s?<td>\s?<ul>\s?(?<Downsides>.*?)\s?</ul>.*))?
+                                 ((<p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*)|(<p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<ul>\s?(?<DegreeOfUse>.*?)\s?</ul>.*))
+                                 <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
+                                 </table>'
                 # $patterntable1 = '(?snx)<h2\sid.*?>\d+\.\s(?<Name>.+)</h2>.*?<table>.*?
                 # <p>Level:</p>\s?</td>\s?<td>\s?<p>(?<Level>.*?)</p>.*
                 # <p>Skills\sneeded:</p>\s?</td>\s?<td>\s?<p>(?<Skills>.*?)</p>.*? # greedy any character
@@ -69,13 +69,18 @@ function Import-OwlOntology
                 # <p>Degree\sof\sUse:</p>\s?</td>\s?<td>\s?<p>(?<DegreeOfUse>.*?)</p>.*
                 # <p>Annual\sSalary\sProjection:</p>\s?</td>\s?<td>\s?<p>(?<AnnualSalaryProjection>.*?)</p>.*?
                 # </table>'
-                $patternul = '(?s)<h2 id.*?>\d+\. (?<Name>.+?)\s?</h2>.*?(?<Benefits><h3>Benefits.*?</ul>).*?(?<Cons><h3>Con.*?</ul>)'
+                $patternul = '(?snx)<h2\sid.*?>\d+\.\s(?<Name>.+?)\s?</h2>.*?
+                              <h3>Benefits.*?</h3>\s<ul>\s(?<Benefits>.*?)\s</ul>.*?
+                              <h3>Con.*?</h3>.*?\s<ul>\s(?<Downsides>.*?)\s</ul>'
+                # $patternul = '(?snx)<h2\sid.*?>\d+\.\s(?<Name>.+?)\s?</h2>.*?
+                #               (?<Benefits><h3>Benefits.*?</ul>).*?
+                #               (?<Cons><h3>Con.*?</ul>)'
 
                 # For each article
                 foreach ($article in $articles)
                 {
                     # If contains table form 1
-                    if ($ms = Select-String -InputObject $article -Pattern $patterntable1)
+                    if (($ms = Select-String -InputObject $article -Pattern $patterntable) -or ($ms = Select-String -InputObject $article -Pattern $patternul))
                     {
                         # Instance name
                         # $InstanceName = $ms.Matches.Groups[1].Value -replace '\s', '_' -replace '#','S'
