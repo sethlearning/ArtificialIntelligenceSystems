@@ -462,6 +462,12 @@ function Set-OwlClassParent
                             Write-Output -InputObject "Specified class and parent class names are the same"
                             return
                         }
+                        # If specified parent class does not exist
+                        if ("#$ParentClassName" -cnotin $xml.Ontology.Declaration.Class.IRI)
+                        {
+                            Write-Output -InputObject "Specified parent class does not exist: $ParentClassName"
+                            return
+                        }
                         # If specified ParentClassName is already a parent
                         if ($ParentClassName -eq ($parentnode | Where-Object -Property Class | ForEach-Object -Process {$PSItem.Class[1].IRI.Trim('#')}))
                         {
