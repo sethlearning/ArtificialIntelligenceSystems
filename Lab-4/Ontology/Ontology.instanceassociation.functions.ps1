@@ -193,7 +193,7 @@ function Remove-OwlInstanceAssociation
                     }
                     if ($PSCmdlet.ParameterSetName -eq 'All')
                     {
-                        # If the instance is associated with any classes
+                        # If the instance is associated with classes
                         if ($nodes = $xml.Ontology.ClassAssertion |
                                     Where-Object -Property NamedIndividual |
                                     Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$InstanceName"})

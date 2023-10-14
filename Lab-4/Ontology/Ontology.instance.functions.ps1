@@ -113,7 +113,7 @@ function New-OwlInstance
                         {
                             if ("#$class" -cnotin $xml.Ontology.Declaration.Class.IRI)
                             {
-                                Write-Output -InputObject "There are no such a class: $class"
+                                Write-Output -InputObject "Class does not exist: $class"
                                 return
                             }
                         }
