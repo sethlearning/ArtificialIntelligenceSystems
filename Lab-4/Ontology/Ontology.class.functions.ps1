@@ -456,6 +456,12 @@ function Set-OwlClassParent
                     # If ParentClassName is specified
                     if ($ParentClassName)
                     {
+                        # If ClassName and ParentClassName is the same class
+                        if ($ClassName -ceq $ParentClassName)
+                        {
+                            Write-Output -InputObject "Specified class and parent class names are the same"
+                            return
+                        }
                         # If specified ParentClassName is already a parent
                         if ($ParentClassName -eq ($parentnode | Where-Object -Property Class | ForEach-Object -Process {$PSItem.Class[1].IRI.Trim('#')}))
                         {
