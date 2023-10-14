@@ -474,39 +474,36 @@ function Set-OwlClassParent
                             Write-Output -InputObject "Specified parent class is already a parent: $ParentClassName"
                             return
                         }
-                        else
+                        # If the class is a parent to another classes
+                        if ($childclasses -and -not $Recurse)
                         {
-                            # If the class is a parent to another classes
-                            if ($childclasses -and -not $Recurse)
-                            {
-                                Write-Output -InputObject "Class has child classes: $childclasses"
-                                return
-                            }
-
-                            # If the class has parent
-                            if ($parentnode)
-                            {
-                                # Remove corresponding SubClassOf node from Ontology node
-                                $xml.Ontology.RemoveChild($parentnode) | Out-Null
-                            }
-
-                            # Create SubClassOf node
-                            $subclassof = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "SubClassOf", $xml.DocumentElement.NamespaceURI)
-                            # Create child Class node
-                            $childclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
-                            # Set child Class node attribute
-                            $childclass.SetAttribute("IRI", "#" + $ClassName)
-                            # Create parent Class node
-                            $parentclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
-                            # Set parent Class node attribute
-                            $parentclass.SetAttribute("IRI", "#" + $ParentClassName)
-                            # Append child Class node as a child to SubClassOf node
-                            $subclassof.AppendChild($childclass) | Out-Null
-                            # Append parent Class node as a child to SubClassOf node
-                            $subclassof.AppendChild($parentclass) | Out-Null
-                            # Append SubClassOf node as a child to Ontology node
-                            $xml.Ontology.AppendChild($subclassof) | Out-Null
+                            Write-Output -InputObject "Class has child classes: $childclasses"
+                            return
                         }
+
+                        # If the class has parent
+                        if ($parentnode)
+                        {
+                            # Remove corresponding SubClassOf node from Ontology node
+                            $xml.Ontology.RemoveChild($parentnode) | Out-Null
+                        }
+
+                        # Create SubClassOf node
+                        $subclassof = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "SubClassOf", $xml.DocumentElement.NamespaceURI)
+                        # Create child Class node
+                        $childclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
+                        # Set child Class node attribute
+                        $childclass.SetAttribute("IRI", "#" + $ClassName)
+                        # Create parent Class node
+                        $parentclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
+                        # Set parent Class node attribute
+                        $parentclass.SetAttribute("IRI", "#" + $ParentClassName)
+                        # Append child Class node as a child to SubClassOf node
+                        $subclassof.AppendChild($childclass) | Out-Null
+                        # Append parent Class node as a child to SubClassOf node
+                        $subclassof.AppendChild($parentclass) | Out-Null
+                        # Append SubClassOf node as a child to Ontology node
+                        $xml.Ontology.AppendChild($subclassof) | Out-Null
                     }
 
                     # If ParentClassName is not specified of Top parameter is used
@@ -518,19 +515,16 @@ function Set-OwlClassParent
                             Write-Output -InputObject "The class is already on the top level"
                             return
                         }
-                        # If the class has parent
-                        else
-                        {
-                            # If the class is a parent to another classes
-                            if ($childclasses -and -not $Recurse)
-                            {
-                                Write-Output -InputObject "Class has child classes: $childclasses"
-                                return
-                            }
 
-                            # Remove corresponding SubClassOf node from Ontology node
-                            $xml.Ontology.RemoveChild($parentnode) | Out-Null
+                        # If the class is a parent to another classes
+                        if ($childclasses -and -not $Recurse)
+                        {
+                            Write-Output -InputObject "Class has child classes: $childclasses"
+                            return
                         }
+
+                        # Remove corresponding SubClassOf node from Ontology node
+                        $xml.Ontology.RemoveChild($parentnode) | Out-Null
                     }
                     # Save file
                     $xml.Save($SaveToFile)
