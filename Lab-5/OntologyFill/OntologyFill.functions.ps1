@@ -2,8 +2,10 @@ function Import-OwlOntology
 {
     Param(
         [string]$FileName,
-        [string]$Url = "https://www.simplilearn.com/best-programming-languages-start-learning-today-article",
-        [string]$SaveToFile
+        [string]$Uri = "https://www.simplilearn.com/best-programming-languages-start-learning-today-article",
+        [string]$SaveToFile,
+        [string]$Proxy,
+        [pscredential]$ProxyCredential
     )
 
     $ClassName = "Language"
@@ -35,8 +37,23 @@ function Import-OwlOntology
             # Load XML file
             $xml.Load($path)
 
+            # Add Uri to parameters hash table
+            $Parameters = @{Uri = $Uri}
+            # If Proxy specified
+            if ($Proxy)
+            {
+                # Add to parameters hash table
+                $Parameters.Add("Proxy", $Proxy)
+            }
+            # If ProxyCredential specified
+            if ($Credential)
+            {
+                # Add to parameters hash table
+                $Parameters.Add("ProxyCredential", $ProxyCredential)
+            }
+
             # Get page content
-            $response = Invoke-WebRequest -Uri $Url
+            $response = Invoke-WebRequest @Parameters
 
             # Define pattern
             $pattern = '(?s)<article><h2 id="\d+.*?</article>'
