@@ -3,7 +3,8 @@ function Add-OwlInstanceAssociation
     Param (
         [string]$FileName,
         [string]$InstanceName,
-        [string[]]$ClassName
+        [string[]]$ClassName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -12,6 +13,22 @@ function Add-OwlInstanceAssociation
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
+            if ($SaveToFile)
+            {
+                # If path is relative
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    # Add to the current location
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            # Save to the same file
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If InstanceName is specified
             if ($InstanceName)
             {
@@ -67,7 +84,7 @@ function Add-OwlInstanceAssociation
                         }
                     }
                     # Save file
-                    $xml.Save($path)
+                    $xml.Save($SaveToFile)
                 }
                 else
                 {
@@ -105,7 +122,9 @@ function Remove-OwlInstanceAssociation
         [Parameter(ParameterSetName='ClassName',Position=2)]
         [string[]]$ClassName,
         [Parameter(ParameterSetName='All')]
-        [switch]$All
+        [switch]$All,
+        [Parameter(Position=3)]
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -114,6 +133,22 @@ function Remove-OwlInstanceAssociation
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
+            if ($SaveToFile)
+            {
+                # If path is relative
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    # Add to the current location
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            # Save to the same file
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If InstanceName is specified
             if ($InstanceName)
             {
@@ -158,7 +193,7 @@ function Remove-OwlInstanceAssociation
                     }
                     if ($PSCmdlet.ParameterSetName -eq 'All')
                     {
-                        # If the instance is associated with any classes
+                        # If the instance is associated with classes
                         if ($nodes = $xml.Ontology.ClassAssertion |
                                     Where-Object -Property NamedIndividual |
                                     Where-Object -FilterScript {$PSItem.NamedIndividual.IRI -ceq "#$InstanceName"})
@@ -173,7 +208,7 @@ function Remove-OwlInstanceAssociation
                         }
                     }
                     # Save file
-                    $xml.Save($path)
+                    $xml.Save($SaveToFile)
                 }
                 else
                 {
@@ -205,7 +240,8 @@ function Set-OwlInstanceAssociation
     Param (
         [string]$FileName,
         [string]$InstanceName,
-        [string[]]$ClassName
+        [string[]]$ClassName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -214,6 +250,22 @@ function Set-OwlInstanceAssociation
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
+            if ($SaveToFile)
+            {
+                # If path is relative
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    # Add to the current location
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            # Save to the same file
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If InstanceName is specified
             if ($InstanceName)
             {
@@ -285,7 +337,7 @@ function Set-OwlInstanceAssociation
                         }
                     }
                     # Save file
-                    $xml.Save($path)
+                    $xml.Save($SaveToFile)
                 }
                 else
                 {

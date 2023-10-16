@@ -62,7 +62,8 @@ function New-OwlClass
     Param(
         [string]$FileName,
         [string]$ClassName,
-        [string]$ParentClassName
+        [string]$ParentClassName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -71,6 +72,22 @@ function New-OwlClass
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
+            if ($SaveToFile)
+            {
+                # If path is relative
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    # Add to the current location
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            # Save to the same file
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If ClassName is specified
             if ($ClassName)
             {
@@ -129,7 +146,7 @@ function New-OwlClass
                     }
 
                     # Save file
-                    $xml.Save($path)
+                    $xml.Save($SaveToFile)
                 }
             }
             else
@@ -155,7 +172,8 @@ function Remove-OwlClass
 {
     Param(
         [string]$FileName,
-        [string]$ClassName
+        [string]$ClassName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -164,6 +182,22 @@ function Remove-OwlClass
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
+            if ($SaveToFile)
+            {
+                # If path is relative
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    # Add to the current location
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            # Save to the same file
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If ClassName is specified
             if ($ClassName)
             {
@@ -198,7 +232,7 @@ function Remove-OwlClass
                         # Remove class declaration node from children of Ontology node
                         $xml.Ontology.RemoveChild($node) | Out-Null
                         # Save file
-                        $xml.Save($path)
+                        $xml.Save($SaveToFile)
                     }
                 }
                 else
@@ -231,7 +265,8 @@ function Rename-OwlClass
     Param(
         [string]$FileName,
         [string]$ClassName,
-        [string]$NewClassName
+        [string]$NewClassName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -240,6 +275,22 @@ function Rename-OwlClass
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
+            if ($SaveToFile)
+            {
+                # If path is relative
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    # Add to the current location
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            # Save to the same file
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If ClassName is specified
             if ($ClassName)
             {
@@ -309,13 +360,174 @@ function Rename-OwlClass
                             }
                         }
                         # Save file
-                        $xml.Save($path)
+                        $xml.Save($SaveToFile)
                     }
                     else
                     {
                         # NewClassName is not specified
                         Write-Output -InputObject "New class name is not specified"
                     }
+                }
+                else
+                {
+                    # Class is not found
+                    Write-Output -InputObject "Class does not exist: $ClassName"
+                }
+            }
+            else
+            {
+                # ClassName is not specified
+                Write-Output -InputObject "Class name is not specified"
+            }
+        }
+        else
+        {
+            # Resolve path error
+            Write-Output -InputObject $ea.Exception.Message
+        }
+    }
+    else
+    {
+        # FileName is not specified
+        Write-Output -InputObject "File name is not specified"
+    }
+}
+
+function Set-OwlClassParent
+{
+    [CmdletBinding(DefaultParameterSetName='ParentClassName',PositionalBinding=$true)]
+    Param (
+        [Parameter(Position=0)]
+        [string]$FileName,
+        [Parameter(Position=1)]
+        [string]$ClassName,
+        [Parameter(ParameterSetName='ParentClassName',Position=2)]
+        [string[]]$ParentClassName,
+        [Parameter(ParameterSetName='Top')]
+        [switch]$Top,
+        [switch]$Recurse,
+        [Parameter(Position=3)]
+        [string]$SaveToFile
+    )
+
+    # If FileName is specified
+    if ($FileName)
+    {
+        # If path exists
+        if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
+        {
+            # Save to a different file
+            if ($SaveToFile)
+            {
+                # If path is relative
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    # Add to the current location
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            # Save to the same file
+            else
+            {
+                $SaveToFile = $path
+            }
+
+            # If ClassName is specified
+            if ($ClassName)
+            {
+                # Create new object
+                $xml = New-Object -TypeName System.Xml.XmlDocument
+                # Load XML file
+                $xml.Load($path)
+
+                # If class exists
+                if ("#$ClassName" -cin $xml.Ontology.Declaration.Class.IRI)
+                {
+                    # Get a parent class of the class
+                    $parentnode = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[0].IRI -ceq "#$ClassName"}
+
+                    # Get child classes of the class
+                    if ($childnodes = $xml.Ontology.SubClassOf | Where-Object -Property Class | Where-Object -FilterScript {$PSItem.Class[1].IRI -ceq "#$ClassName"})
+                    {
+                        # Create comma-separated child class list
+                        $childclasses = Join-String -InputObject ($childnodes | Where-Object -Property Class | ForEach-Object -Process {$PSItem.Class[0].IRI.Trim('#')}) -Separator ', '
+                    }
+
+                    # If ParentClassName is specified
+                    if ($ParentClassName)
+                    {
+                        # If ClassName and ParentClassName is the same class
+                        if ($ClassName -ceq $ParentClassName)
+                        {
+                            Write-Output -InputObject "Specified class and parent class names are the same"
+                            return
+                        }
+                        # If specified parent class does not exist
+                        if ("#$ParentClassName" -cnotin $xml.Ontology.Declaration.Class.IRI)
+                        {
+                            Write-Output -InputObject "Specified parent class does not exist: $ParentClassName"
+                            return
+                        }
+                        # If specified ParentClassName is already a parent
+                        if ($ParentClassName -eq ($parentnode | Where-Object -Property Class | ForEach-Object -Process {$PSItem.Class[1].IRI.Trim('#')}))
+                        {
+                            Write-Output -InputObject "Specified parent class is already a parent: $ParentClassName"
+                            return
+                        }
+                        # If the class is a parent to another classes
+                        if ($childclasses -and -not $Recurse)
+                        {
+                            Write-Output -InputObject "Class has child classes: $childclasses"
+                            return
+                        }
+
+                        # If the class has parent
+                        if ($parentnode)
+                        {
+                            # Remove corresponding SubClassOf node from Ontology node
+                            $xml.Ontology.RemoveChild($parentnode) | Out-Null
+                        }
+
+                        # Create SubClassOf node
+                        $subclassof = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "SubClassOf", $xml.DocumentElement.NamespaceURI)
+                        # Create child Class node
+                        $childclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
+                        # Set child Class node attribute
+                        $childclass.SetAttribute("IRI", "#" + $ClassName)
+                        # Create parent Class node
+                        $parentclass = $xml.CreateNode([System.Xml.XmlNodeType]::Element, "Class", $xml.DocumentElement.NamespaceURI)
+                        # Set parent Class node attribute
+                        $parentclass.SetAttribute("IRI", "#" + $ParentClassName)
+                        # Append child Class node as a child to SubClassOf node
+                        $subclassof.AppendChild($childclass) | Out-Null
+                        # Append parent Class node as a child to SubClassOf node
+                        $subclassof.AppendChild($parentclass) | Out-Null
+                        # Append SubClassOf node as a child to Ontology node
+                        $xml.Ontology.AppendChild($subclassof) | Out-Null
+                    }
+
+                    # If ParentClassName is not specified of Top parameter is used
+                    elseif (-not $ParentClassName -or $Top)
+                    {
+                        # If the class does not have a parent
+                        if (-not $parentnode)
+                        {
+                            Write-Output -InputObject "The class is already on the top level"
+                            return
+                        }
+
+                        # If the class is a parent to another classes
+                        if ($childclasses -and -not $Recurse)
+                        {
+                            Write-Output -InputObject "Class has child classes: $childclasses"
+                            return
+                        }
+
+                        # Remove corresponding SubClassOf node from Ontology node
+                        $xml.Ontology.RemoveChild($parentnode) | Out-Null
+                    }
+                    # Save file
+                    $xml.Save($SaveToFile)
                 }
                 else
                 {

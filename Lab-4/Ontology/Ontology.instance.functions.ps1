@@ -65,7 +65,8 @@ function New-OwlInstance
     Param (
         [string]$FileName,
         [string]$InstanceName,
-        [string[]]$ClassName
+        [string[]]$ClassName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -74,6 +75,22 @@ function New-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
+            if ($SaveToFile)
+            {
+                # If path is relative
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    # Add to the current location
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            # Save to the same file
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If InstanceName is specified
             if ($InstanceName)
             {
@@ -96,7 +113,7 @@ function New-OwlInstance
                         {
                             if ("#$class" -cnotin $xml.Ontology.Declaration.Class.IRI)
                             {
-                                Write-Output -InputObject "There are no such a class: $class"
+                                Write-Output -InputObject "Class does not exist: $class"
                                 return
                             }
                         }
@@ -141,7 +158,7 @@ function New-OwlInstance
                     }
 
                     # Save file
-                    $xml.Save($path)
+                    $xml.Save($SaveToFile)
                 }
             }
             else
@@ -167,7 +184,8 @@ function Remove-OwlInstance
 {
     Param (
         [string]$FileName,
-        [string]$InstanceName
+        [string]$InstanceName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -176,6 +194,22 @@ function Remove-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
+            if ($SaveToFile)
+            {
+                # If path is relative
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    # Add to the current location
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            # Save to the same file
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If InstanceName is specified
             if ($InstanceName)
             {
@@ -210,7 +244,7 @@ function Remove-OwlInstance
                         # Remove instance declaration node from children of Ontology node
                         $xml.Ontology.RemoveChild($node) | Out-Null
                         # Save file
-                        $xml.Save($path)
+                        $xml.Save($SaveToFile)
                     }
                 }
                 else
@@ -243,7 +277,8 @@ function Rename-OwlInstance
     Param (
         [string]$FileName,
         [string]$InstanceName,
-        [string]$NewInstanceName
+        [string]$NewInstanceName,
+        [string]$SaveToFile
     )
 
     # If FileName is specified
@@ -252,6 +287,22 @@ function Rename-OwlInstance
         # If path exists
         if ($path = Resolve-Path -Path $FileName -ErrorAction SilentlyContinue -ErrorVariable ea)
         {
+            # Save to a different file
+            if ($SaveToFile)
+            {
+                # If path is relative
+                if (-not (Split-Path -Path $SaveToFile -IsAbsolute))
+                {
+                    # Add to the current location
+                    $SaveToFile = Join-Path -Path $PWD.Path -ChildPath $SaveToFile
+                }
+            }
+            # Save to the same file
+            else
+            {
+                $SaveToFile = $path
+            }
+
             # If InstanceName is specified
             if ($InstanceName)
             {
@@ -296,7 +347,7 @@ function Rename-OwlInstance
                         }
 
                         # Save file
-                        $xml.Save($path)
+                        $xml.Save($SaveToFile)
                     }
                     else
                     {

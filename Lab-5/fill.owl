@@ -1,0 +1,818 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#" xml:base="http://www.semanticweb.org/sergeyvasin/ontologies/2023/9/untitled-ontology-29" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" ontologyIRI="http://www.semanticweb.org/sergeyvasin/ontologies/2023/9/untitled-ontology-29">
+  <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#" />
+  <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />
+  <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace" />
+  <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#" />
+  <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#" />
+  <Declaration>
+    <Class IRI="#Language" />
+  </Declaration>
+  <Declaration>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+  </Declaration>
+  <Declaration>
+    <DataProperty IRI="#Benefits" />
+  </Declaration>
+  <Declaration>
+    <DataProperty IRI="#DegreeOfUse" />
+  </Declaration>
+  <Declaration>
+    <DataProperty IRI="#Downsides" />
+  </Declaration>
+  <Declaration>
+    <DataProperty IRI="#Level" />
+  </Declaration>
+  <Declaration>
+    <DataProperty IRI="#Platform" />
+  </Declaration>
+  <Declaration>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+  </Declaration>
+  <Declaration>
+    <DataProperty IRI="#SkillsNeeded" />
+  </Declaration>
+  <DataPropertyRange>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <Datatype abbreviatedIRI="xsd:string" />
+  </DataPropertyRange>
+  <DataPropertyRange>
+    <DataProperty IRI="#Benefits" />
+    <Datatype abbreviatedIRI="xsd:string" />
+  </DataPropertyRange>
+  <DataPropertyRange>
+    <DataProperty IRI="#DegreeOfUse" />
+    <Datatype abbreviatedIRI="xsd:string" />
+  </DataPropertyRange>
+  <DataPropertyRange>
+    <DataProperty IRI="#Downsides" />
+    <Datatype abbreviatedIRI="xsd:string" />
+  </DataPropertyRange>
+  <DataPropertyRange>
+    <DataProperty IRI="#Level" />
+    <Datatype abbreviatedIRI="xsd:string" />
+  </DataPropertyRange>
+  <DataPropertyRange>
+    <DataProperty IRI="#Platform" />
+    <Datatype abbreviatedIRI="xsd:string" />
+  </DataPropertyRange>
+  <DataPropertyRange>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <Datatype abbreviatedIRI="xsd:string" />
+  </DataPropertyRange>
+  <DataPropertyRange>
+    <DataProperty IRI="#SkillsNeeded" />
+    <Datatype abbreviatedIRI="xsd:string" />
+  </DataPropertyRange>
+  <Declaration>
+    <NamedIndividual IRI="#Javascript" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#Javascript" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#Javascript" />
+    <Literal>Beginner to Intermediate</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#Javascript" />
+    <Literal>HTML and CSS to define the content and layout of web pages</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#Javascript" />
+    <Literal>Cross-platform (desktop, mobile, web)</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#Javascript" />
+    <Literal>The most popular programming language in the world</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#Javascript" />
+    <Literal>Easy to learn and implement; Used everywhere on the web; Can run immediately within the client-side browser; Reduces the demand on the website server</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#Javascript" />
+    <Literal>Can sometimes be interpreted differently by different browsers which makes it difficult to write cross-browser code.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#Javascript" />
+    <Literal>Widely used; highly applicable</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#Javascript" />
+    <Literal>$112,152</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#Python" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#Python" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#Python" />
+    <Literal>Beginner – Python enables a beginner to become productive quickly</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#Python" />
+    <Literal>Problem-solving, abstract thinking</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#Python" />
+    <Literal>Web, Desktop</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#Python" />
+    <Literal>Becoming continuously more popular</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#Python" />
+    <Literal>Flexible; Naturally/Intuitively readable; Highly regarded official tutorials and documentation; Scripted as opposed to compiled</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#Python" />
+    <Literal>Doesn’t start with programming basics (known to abstract too many important basic concepts)</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#Python" />
+    <Literal>Coding skills widely used; popular in both technical education and business use</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#Python" />
+    <Literal>$109,092</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#Go" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#Go" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#Go" />
+    <Literal>Beginner to intermediate</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#Go" />
+    <Literal>Easy to learn if you already know at least one other programming language; otherwise, you just need patience and a willingness to learn.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#Go" />
+    <Literal>Cross-platform, mainly desktop</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#Go" />
+    <Literal>Not as popular as Java or Python, but it has been increasing in popularity</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#Go" />
+    <Literal>Widely considered a “minimalist” language; Easy to learn; Transparent code; Compatible; Fast</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#Go" />
+    <Literal>No generics (which means you may end up writing more code than you would in other languages); very little library support; Go developer community is not very robust or supportive</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#Go" />
+    <Literal>Widely used, particular for Google applications (created at Google)</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#Go" />
+    <Literal>$141,654</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#Java" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#Java" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#Java" />
+    <Literal>Intermediate</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#Java" />
+    <Literal>Problem-solving, knowledge of the object-oriented structure</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#Java" />
+    <Literal>Web, Mobile, Desktop</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#Java" />
+    <Literal>One of the world’s most popular; high demand</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#Java" />
+    <Literal>Regarded as a good start for learning to think like a programmer and gain coding skills; You’ll be able to access/manipulate the most important computer functions, like the file system, graphics, and sound for any fairly sophisticated and modern program that can run on any operating system.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#Java" />
+    <Literal>Lots of new vocabulary to learn; a higher-level language</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#Java" />
+    <Literal>Widely used; highly applicable</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#Java" />
+    <Literal>$109,225</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#Kotlin" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#Kotlin" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#Kotlin" />
+    <Literal>Intermediate to advanced</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#Kotlin" />
+    <Literal>Prior experience with programming languages, particularly Java</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#Kotlin" />
+    <Literal>Web, Mobile, Desktop, Server</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#Kotlin" />
+    <Literal>Increasingly popular; used for Android applications</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#Kotlin" />
+    <Literal>Less code-heavy than Java and other languages; Relatively easy to adopt; Fully compatible with Java </Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#Kotlin" />
+    <Literal>Fluctuating compilation speed; no static keyword in Kotlin</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#Kotlin" />
+    <Literal>Widely used; highly applicable</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#Kotlin" />
+    <Literal>$136,000</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#PHP" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#PHP" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#PHP" />
+    <Literal>Beginner to intermediate</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#PHP" />
+    <Literal>Simple if you have a background in programming languages, but relatively easy to learn for newcomers</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#PHP" />
+    <Literal>Cross-platform (desktop, mobile, web)</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#PHP" />
+    <Literal>Used by nearly 80% of all active websites, so it’s very popular with web developers</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#PHP" />
+    <Literal>Open-source; Easy to develop and may be integrated with many different tools; Cost effective; Flexible with database connectivity</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#PHP" />
+    <Literal>Not very secure; not well-suited for large applications; poor error-handling; cannot support a large number of apps</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#PHP" />
+    <Literal>While it’s used by the vast majority of websites, its use is declining</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#PHP" />
+    <Literal>$107,409</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#CS" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#CS" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#CS" />
+    <Literal>Intermediate</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#CS" />
+    <Literal>A basic understanding of how to write code</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#CS" />
+    <Literal>Cross-platform, including mobile and enterprise software applications</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#CS" />
+    <Literal>Relatively popular, but not as popular as Java (its closest rival)</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#CS" />
+    <Literal>Fast; Simple to use; Object-oriented; Scalable and updateable; Interoperable with other codes; Open source; Extensive library</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#CS" />
+    <Literal>Less flexible, as it depends on Microsoft’s .Net framework; poor x-platform GUI</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#CS" />
+    <Literal>Used by roughly one-third of all software developers, particularly relevant for Microsoft developers</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#CS" />
+    <Literal>$111,760</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#Swift" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#Swift" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#Swift" />
+    <Literal>Beginner to intermediate</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#Swift" />
+    <Literal>Willingness to spend time reading tutorials (which are widely available); no prior experience with programming languages required</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#Swift" />
+    <Literal>Mobile (Apple iOS apps, specifically)</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#Swift" />
+    <Literal>Gaining in popularity, especially among Apple iOS application developers</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#Swift" />
+    <Literal>Relatively easy to learn; Clean syntax; Less code; Faster than comparable programming languages; Open source</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#Swift" />
+    <Literal>Still a young language; poor interoperability with third party tools; lacks support for earlier versions of iOS</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#Swift" />
+    <Literal>Used extensively for creating iOS apps used on the iPhone, iPad, and Apple Watch</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#Swift" />
+    <Literal>$109,652</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#R" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#R" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#R" />
+    <Literal>Intermediate</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#R" />
+    <Literal>Easier if you already know Javascript or Python, but it’s recommended for people with a firm grasp of mathematics</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#R" />
+    <Literal>Mainly desktop</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#R" />
+    <Literal>Not nearly as popular as it once was, mainly due to rival language Python’s soaring popularity</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#R" />
+    <Literal>Open source; Great support for managing data; Wide variety of packages available; Cross-functional with Linux, Windows, and Mac OS; Ideal for machine learning applications</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#R" />
+    <Literal>Objects are stored in physical memory, which can strain resources; lacks basic security; slower than Matlab or Python</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#R" />
+    <Literal>Widely used for analytics</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#R" />
+    <Literal>$90,940</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#Ruby" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#Ruby" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#Ruby" />
+    <Literal>Beginner – Ruby and Ruby on Rails have evolved to become extremely popular for web developers.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#Ruby" />
+    <Literal>Problem-solving, abstract thinking (ability to visualize what application users want to see)</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#Ruby" />
+    <Literal>On the rise</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#Ruby" />
+    <Literal>Flexible; The syntax is considered easy to read and to write (no specialized “vocabulary” to get started); Enforces good programming style</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#Ruby" />
+    <Literal>Least broadly used</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#Ruby" />
+    <Literal>$121,070</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#C_and_C++" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#C_and_C++" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#C_and_C++" />
+    <Literal>C – Intermediate to Advanced </Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#C_and_C++" />
+    <Literal>Problem-solving, basic computer knowledge. As C and C++ are geared toward low-level management of computer resources,  knowledge of computer functions such as memory management is beneficial.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#C_and_C++" />
+    <Literal>Mobile, Desktop, Embedded</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#C_and_C++" />
+    <Literal>C – There has been a higher migration from C to C++; C++ – One of the world’s most popular languages</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#C_and_C++" />
+    <Literal>C – Used to learn the fundamentals of programming at the lowest (hardware) level; C++ – allows for a much higher “control” than other languages</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#C_and_C++" />
+    <Literal>C – Coding in C is stricter, not very beginner-friendly language, the steeper learning curve; C++ – A bit more challenging to pick up and become productive with than C (and even more so than Java)</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#C_and_C++" />
+    <Literal>C – One of the most widely used; C++ – Widely used</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#C_and_C++" />
+    <Literal>$118,366</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#Matlab" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#Matlab" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#Matlab" />
+    <Literal>Beginner</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#Matlab" />
+    <Literal>Basic knowledge of programming is recommended, but not required</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#Matlab" />
+    <Literal>Mostly desktop</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#Matlab" />
+    <Literal>Not as popular as Python (its closest rival), but its popularity is increasing for hardware engineering and running visualizations</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#Matlab" />
+    <Literal>Can be used to easily run and test algorithms; Easily debugged; Enables extensive data analysis and visualizations; Relatively simple to learn</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#Matlab" />
+    <Literal>As an interpreted (vs. compiled) language, it’s relatively slow; installation files take a significant amount of space on the computer</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#Matlab" />
+    <Literal>Not used extensively, outside of the science and research domains</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#Matlab" />
+    <Literal>$100,766</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#TypeScript" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#TypeScript" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#TypeScript" />
+    <Literal>Intermediate to Advanced</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#TypeScript" />
+    <Literal>Basic knowledge of JavaScript required</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#TypeScript" />
+    <Literal>Web</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#TypeScript" />
+    <Literal>Rapidly gaining popularity among programmers, especially for large-scale programs.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#TypeScript" />
+    <Literal>Great for large-scale projects; It has the fastest growing GitHub community; Makes JavaScript development more efficient</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#TypeScript" />
+    <Literal>You need to know JavaScript first.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#TypeScript" />
+    <Literal>Gaining heavy traction among web developers</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#TypeScript" />
+    <Literal>$75,200</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#Scala" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#Scala" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Level" />
+    <NamedIndividual IRI="#Scala" />
+    <Literal>Complex</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#SkillsNeeded" />
+    <NamedIndividual IRI="#Scala" />
+    <Literal>Basic knowledge of Java, C, C++, or Python recommended, but not required</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Platform" />
+    <NamedIndividual IRI="#Scala" />
+    <Literal>Cross-platform</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#PopularityAmongProgrammers" />
+    <NamedIndividual IRI="#Scala" />
+    <Literal>Scala’s popularity has taken several hits, probably due to its complexity. It enjoys a good reputation in the fields of big data and machine learning.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#Scala" />
+    <Literal>Faster than Python; Ideal for data analytics; Highly functional</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#Scala" />
+    <Literal>It’s very complex; The SBT and compiler are clunky; Limited developer pool</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#DegreeOfUse" />
+    <NamedIndividual IRI="#Scala" />
+    <Literal>Extensive use in many companies’ data engineering infrastructure, especially data processing, web development, and distributed computing.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#AnnualSalaryProjection" />
+    <NamedIndividual IRI="#Scala" />
+    <Literal>$127,005</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#SQL" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#SQL" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#SQL" />
+    <Literal>SQL is a standard database query language that enables users to manipulate and query data in a database quickly.; SQL is widely used in many applications and environments, such as web applications, data warehouses, and e-commerce applications.; SQL provides many benefits over other database query languages, such as improved performance, better data integrity, and more accessible data manipulation.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#SQL" />
+    <Literal>If you are unfamiliar with programming or database concepts, SQL can be challenging to learn.; SQL can be slow compared to other languages, mainly when working with large databases.; And SQL is not well suited for certain types of tasks, such as complex mathematical calculations or machine learning.</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#HTML" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#HTML" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#HTML" />
+    <Literal>Benefits of using HTML include creating well-structured, standards-compliant web pages that are easy to maintain and update.; HTML is also easy to learn and is a great starting point for those new to web development.; HTML is used to structure and present content on the web and is typically used alongside CSS and JavaScript.; Additionally, HTML5 provides better multimedia and interactive content support, making it a powerful tool for creating engaging web experiences.; HTML5 is the latest version and includes new features like video and audio elements, local storage, and 2D/3D graphics. HTML5 is designed to be more user-friendly and efficient than previous versions of HTML.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#HTML" />
+    <Literal>First, because HTML is a markup language, it is not as expressive as a programming language like JavaScript or PHP, which means that complex web applications or pages can be more challenging to develop in HTML.; Additionally, HTML is not a very secure language, so web developers must carefully encode any user input to prevent security vulnerabilities properly.; Finally, HTML can be somewhat challenging to learn for newcomers, as it has a lot of different elements and syntax rules</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#CSS" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#CSS" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#CSS" />
+    <Literal>CSS is used to style all HTML tags, including the body of the document, headings, paragraphs, and other material. CSS can also be used to style how table components, grid elements, and images are displayed.; Web developers use CSS to create responsive and accessible websites. CSS can make it easier for web developers to create websites that look good on all devices, including mobile phones and tablets.; CSS can also help make websites more accessible to people with disabilities.; CSS is easy to learn and use. Many tutorials and resources are available online, and anyone can start using CSS to style their web pages.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#CSS" />
+    <Literal>CSS can be challenging to debug. When there are errors in a CSS file, it can be difficult to track down the source of the problem.; And it can be time-consuming to write. CSS files can be large and complex, and it can take a lot of time to create and maintain them.</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#NoSQL" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#NoSQL" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#NoSQL" />
+    <Literal>NoSQL is a database system that does not use the traditional relational model.; NoSQL databases are often used for big data applications that need to scale quickly.; NoSQL databases can be faster and more scalable than relational databases.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#NoSQL" />
+    <Literal>NoSQL databases are generally less mature than SQL databases and, as such, may lack some of the features and functionality that SQL databases offer.; Additionally, because NoSQL databases are less standardized than SQL databases, it can be more challenging to find skilled personnel who can work with them.; And NoSQL databases may be less compatible with existing applications and infrastructure than SQL databases.</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#Rust" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#Rust" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#Rust" />
+    <Literal>Rust is a fast and efficient language used to create high-performance applications.; Rust is also a safe and reliable language, which makes it perfect for developing mission-critical software.; Additionally, Rust is easy to learn and use and has a great community of developers who are always willing to help.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#Rust" />
+    <Literal>There needs to be more support or documentation available for other languages because it is a new language, making it difficult to learn and use Rust.; Additionally, Rust only supports some platforms, and it can be challenging to integrate with existing codebases.</Literal>
+  </DataPropertyAssertion>
+  <Declaration>
+    <NamedIndividual IRI="#Perl" />
+  </Declaration>
+  <ClassAssertion>
+    <Class IRI="#Language" />
+    <NamedIndividual IRI="#Perl" />
+  </ClassAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Benefits" />
+    <NamedIndividual IRI="#Perl" />
+    <Literal>Perl is a powerful programming language with many features and applications. It is widely used in system administration, web development, network programming, and many other fields.; Perl is easy to learn, and its concise syntax makes it an excellent choice for beginners. It is also very versatile, allowing you to write programs in various styles.; Perl has excellent support for many databases, making it a good choice for database-driven applications. It also has excellent support for graphics and multimedia, making it a good choice for media-rich applications.</Literal>
+  </DataPropertyAssertion>
+  <DataPropertyAssertion>
+    <DataProperty IRI="#Downsides" />
+    <NamedIndividual IRI="#Perl" />
+    <Literal>First of all, it is more challenging to learn than some other languages like Python, and it has a very steep learning curve and can confuse beginners.; Additionally, Perl is not as widely used as other languages, so there is not as much support available.; Finally, it can be pretty slow compared to some other languages.</Literal>
+  </DataPropertyAssertion>
+</Ontology>
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
