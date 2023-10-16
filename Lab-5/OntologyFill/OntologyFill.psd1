@@ -33,7 +33,7 @@ Copyright = '(c) Sergey Vasin. All rights reserved.'
 Description = 'Ontology fill'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '5.1'
+PowerShellVersion = '6.0'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''

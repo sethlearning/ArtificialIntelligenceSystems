@@ -19,8 +19,8 @@ function Deploy-sthModule
 }
 
 $ModuleName = Split-Path -Path $PSScriptRoot\.. -Leaf
-$ModulePath = "$($env:ProgramFiles)\WindowsPowerShell\Modules"
-Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
+# $ModulePath = "$($env:ProgramFiles)\WindowsPowerShell\Modules"
+# Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
 
 $ModulePath = "$($env:ProgramFiles)\PowerShell\Modules"
 Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
